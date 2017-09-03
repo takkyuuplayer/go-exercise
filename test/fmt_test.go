@@ -1,4 +1,4 @@
-package tests
+package test
 
 import "fmt"
 
@@ -25,5 +25,5 @@ func ExamplePrintStruct() {
 	v := Vertex{1, 2}
 
 	fmt.Printf("%#v", v)
-	// Output: tests.Vertex{X:1, Y:2}
+	// Output: test.Vertex{X:1, Y:2}
 }
