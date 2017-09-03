@@ -35,3 +35,15 @@ func TestFindAllString(t *testing.T) {
 			%#v`, []string{"ar", "an"}, re.FindAllString("paranormal", 2)))
 	}
 }
+
+func TestFindStringSubmatch(t *testing.T) {
+	re := regexp.MustCompile("a(x*)b(y|z)c")
+
+	if !reflect.DeepEqual(re.FindStringSubmatch("-axxxbyc-"), []string{"axxxbyc", "xxx", "y"}) {
+		t.Errorf(`re.FindStringSubmatch("-axxxbyc-") = %#v, want %#v`, re.FindStringSubmatch("-axxxbyc-"), []string{"axxxbyc", "xxx", "y"})
+	}
+
+	if !reflect.DeepEqual(re.FindStringSubmatch("-abzc"), []string{"abzc", "", "z"}) {
+		t.Errorf(`re.FindStringSubmatch("-abzc") = %#v, want %#v`, re.FindStringSubmatch("-abzc"), []string{"abzc", "", "z"})
+	}
+}
