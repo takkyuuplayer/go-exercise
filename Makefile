@@ -1,7 +1,7 @@
 test:
 	go test ./...
-go:
-	@cd docker && $(MAKE) go
 
-go-test:
-	@cd docker && $(MAKE) go-test
+run:
+	@cd docker && $(MAKE) run
+run-test:
+	@cd docker && $(MAKE) run-test
