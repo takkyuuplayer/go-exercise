@@ -1,4 +1,4 @@
-package main
+package tour
 
 import "testing"
 
@@ -36,11 +36,6 @@ func TestPointer(t *testing.T) {
 	}
 }
 
-type Vertex struct {
-	X int
-	Y int
-}
-
 func TestStruct(t *testing.T) {
 	v := Vertex{1, 2}
 
@@ -60,7 +55,7 @@ func TestPointerOfStruct(t *testing.T) {
 
 	p := &v
 
-	if fmt.Sprintf("%T", p) != "*main.Vertex" {
+	if fmt.Sprintf("%T", p) != "*tour.Vertex" {
 		t.Fatal("type is Vertex's pointer: " + fmt.Sprintf("%T(%v)", p, p))
 	}
 

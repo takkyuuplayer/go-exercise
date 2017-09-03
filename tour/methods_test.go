@@ -1,21 +1,17 @@
-package main
+package tour
 
 import (
 	"fmt"
-	"testing"
 	"math"
+	"testing"
 )
 
-type Vertex struct {
-	X, Y float64
-}
-
-func (v *Vertex) Abs() float64{
+func (v *Vertex) Abs() float64 {
 	if v == nil {
 		return 0
 	}
 
-	return math.Sqrt(v.X * v.X + v.Y * v.Y)
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
 func (v *Vertex) Scale(f float64) {
@@ -23,15 +19,15 @@ func (v *Vertex) Scale(f float64) {
 	v.Y = v.Y * f
 }
 
-func TestMethodsForStruct (t *testing.T) {
+func TestMethodsForStruct(t *testing.T) {
 	v := Vertex{3, 4}
-	
+
 	if v.Abs() != 5 {
 		t.Fatal("method is called: " + fmt.Sprintf("%T(%v)", v.Abs(), v.Abs()))
 	}
 }
 
-func TestPointerReceivers (t *testing.T) {
+func TestPointerReceivers(t *testing.T) {
 	v := Vertex{3, 4}
 
 	v.Scale(10)
@@ -43,14 +39,14 @@ func TestPointerReceivers (t *testing.T) {
 
 type MyFloat float64
 
-func (f MyFloat) Abs() float64{
+func (f MyFloat) Abs() float64 {
 	if f < 0 {
 		return float64(-f)
 	}
 	return float64(f)
 }
 
-func TestMethodsForType (t *testing.T) {
+func TestMethodsForType(t *testing.T) {
 	f := MyFloat(-2)
 
 	if f.Abs() != 2 {
@@ -63,7 +59,7 @@ type Abser interface {
 	Abs() float64
 }
 
-func TestInterface (t *testing.T) {
+func TestInterface(t *testing.T) {
 	var a Abser
 
 	a = MyFloat(-2)
@@ -79,7 +75,7 @@ func TestInterface (t *testing.T) {
 	}
 }
 
-func TestInterfaceWithNil (t *testing.T) {
+func TestInterfaceWithNil(t *testing.T) {
 	var i Abser
 
 	if fmt.Sprintf("%T(%v)", i, i) != "<nil>(<nil>)" {
@@ -90,16 +86,15 @@ func TestInterfaceWithNil (t *testing.T) {
 
 	i = ty
 
-	if i.Abs() != 0{
+	if i.Abs() != 0 {
 		t.Fatal("default value is nil: " + fmt.Sprintf("%T(%v)", i.Abs(), i.Abs()))
 	}
 }
 
-func TestEmptyInterface (t *testing.T) {
+func TestEmptyInterface(t *testing.T) {
 	var i interface{}
 
 	i = 42
-
 
 	if fmt.Sprintf("%T(%v)", i, i) != "int(42)" {
 		t.Fatal("can be any: " + fmt.Sprintf("%T(%v)", fmt.Sprintf("%T(%v)", i, i), fmt.Sprintf("%T(%v)", i, i)))
@@ -107,13 +102,12 @@ func TestEmptyInterface (t *testing.T) {
 
 	i = "hello"
 
-
 	if fmt.Sprintf("%T(%v)", i, i) != "string(hello)" {
 		t.Fatal("can be any: " + fmt.Sprintf("%T(%v)", fmt.Sprintf("%T(%v)", i, i), fmt.Sprintf("%T(%v)", i, i)))
 	}
 }
 
-func TestTypeAssertions (t *testing.T) {
+func TestTypeAssertions(t *testing.T) {
 	var i interface{} = "hello"
 
 	if fmt.Sprintf("%T(%v)", i, i) != "string(hello)" {
@@ -142,26 +136,26 @@ func TestTypeAssertions (t *testing.T) {
 	}
 }
 
-func TestTypeSwitches (t *testing.T) {
+func TestTypeSwitches(t *testing.T) {
 	var i interface{} = 24
 
 	switch v := i.(type) {
 	case int:
 	default:
-			t.Fatal("It should be int: " + fmt.Sprintf("%T(%v)", v, v))
+		t.Fatal("It should be int: " + fmt.Sprintf("%T(%v)", v, v))
 	}
 }
 
 type Person struct {
 	Name string
-	Age int
+	Age  int
 }
 
-func (p Person) String() string{
+func (p Person) String() string {
 	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
 }
 
-func TestStringerInterface (t *testing.T) {
+func TestStringerInterface(t *testing.T) {
 	a := Person{"Arthur Dent", 42}
 
 	if fmt.Sprintf("%v", a) != "Arthur Dent (42 years)" {

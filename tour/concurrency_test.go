@@ -1,20 +1,20 @@
-package main
+package tour
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestChannels(t *testing.T) {
 	sum := func(s []int, c chan int) {
-		ret := 0;
+		ret := 0
 		for _, v := range s {
 			ret += v
 		}
 		c <- ret
 	}
 
-	s := []int{7,2,8.-9,4,0}
+	s := []int{7, 2, 8. - 9, 4, 0}
 
 	c := make(chan int, 2)
 	go sum(s[:len(s)/2], c)
@@ -29,13 +29,13 @@ func TestChannels(t *testing.T) {
 	}
 }
 
-func TestRangeAndClose (t *testing.T) {
+func TestRangeAndClose(t *testing.T) {
 	fib := func(n int, c chan int) {
 		current, next := 0, 1
 
 		for i := 0; i < n; i++ {
 			c <- current
-			current, next = next, current + next
+			current, next = next, current+next
 		}
 
 		close(c)
@@ -55,15 +55,15 @@ func TestRangeAndClose (t *testing.T) {
 	}
 }
 
-func TestSelect (t *testing.T) {
+func TestSelect(t *testing.T) {
 	fib := func(c, quit chan int) {
 		current, next := 0, 1
 
 		for {
 			select {
 			case c <- current:
-				current, next = next, current + next
-			case <- quit:
+				current, next = next, current+next
+			case <-quit:
 				return
 			}
 		}
