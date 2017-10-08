@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     container_name: golang-exercise
-    image: golang
+    image: library/golang:1.8
     volumes:
       - ../:/srv/
     environment:
