@@ -1,3 +1,5 @@
+.PHONY: test run run-test
+
 test:
 	go test ./...
 
