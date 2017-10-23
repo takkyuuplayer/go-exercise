@@ -7,8 +7,6 @@ services:
       - ../:/srv/
     environment:
       - TZ=Asia/Tokyo
-    ports:
-      - 8000:8000
     tty: true
     command: bash
     working_dir: /srv
