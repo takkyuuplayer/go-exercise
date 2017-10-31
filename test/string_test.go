@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 	"unicode/utf8"
 )
@@ -44,13 +45,28 @@ func TestStringModification(t *testing.T) {
 	}
 }
 
-func TestByte(t *testing.T) {
+func TestByteCode(t *testing.T) {
 	if "\xff" != "\377" {
 		t.Errorf(`"\xff" = %#v, want %#v`, "\xff", "\377")
 	}
 
 	if "\xff" != "\377" {
 		t.Errorf(`"\xff" = %#v, want %#v`, "\xff", "\377")
+	}
+
+}
+
+func TestStringToByte(t *testing.T) {
+	org := "abcd"
+	a := []byte(org)
+	copy(a[1:2], []byte(" "))
+
+	if !reflect.DeepEqual([]byte(org), []byte("abcd")) {
+		t.Errorf(`[]byte(org) = %#v, want %#v`, []byte(org), []byte("abcd"))
+	}
+
+	if !reflect.DeepEqual(a, []byte("a cd")) {
+		t.Errorf(`a = %#v, want %#v`, a, []byte("a cd"))
 	}
 }
 
