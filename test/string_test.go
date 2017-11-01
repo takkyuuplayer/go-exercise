@@ -106,3 +106,18 @@ func TestUTF8(t *testing.T) {
 		t.Errorf(`s = %#v, want %#v`, s, s2)
 	}
 }
+
+func TestForLoop(t *testing.T) {
+	if fmt.Sprintf("%T", 'a') != "int32" {
+		t.Errorf(`Type of 'a' = %T, want %s`, 'a', "int32")
+	}
+
+	s := "Hello 世界"
+
+	for _, v := range s {
+		if fmt.Sprintf("%T", v) != "int32" {
+			t.Errorf(`Type of v = %T, want %s`, v, "int32")
+		}
+	}
+
+}
