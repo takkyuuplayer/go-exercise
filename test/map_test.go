@@ -30,3 +30,11 @@ func TestMapZeroValue(t *testing.T) {
 	}
 
 }
+
+func TestMultiMap(t *testing.T) {
+	m := map[string]map[string]bool{}
+
+	if m["a"]["b"] != false {
+		t.Errorf(`m["a"]["b"] = %#v, want %#v`, m["a"]["b"], false)
+	}
+}

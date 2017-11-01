@@ -6,6 +6,12 @@ import (
 	"unicode/utf8"
 )
 
+func TestUTFMax(t *testing.T) {
+	if utf8.UTFMax != 4 { // 4 byte
+		t.Errorf(`utf8.UTFMax = %#v, want %#v`, utf8.UTFMax, 4)
+	}
+}
+
 func TestRuneLen(t *testing.T) {
 	if utf8.RuneLen(' ') != 1 {
 		t.Errorf(`utf8.RuneLen(' ') = %#v, want %#v`, utf8.RuneLen(' '), 1)

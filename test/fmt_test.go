@@ -1,6 +1,8 @@
 package test
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func ExamplePrintfV() {
 	fmt.Printf("%v", 1)
