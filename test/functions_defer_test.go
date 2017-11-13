@@ -39,3 +39,19 @@ func TestDefer(t *testing.T) {
 
 	defer incrementX() // 1
 }
+
+func double(x int) int {
+	return x + x
+}
+
+func triple(x int) (result int) {
+	defer func() { result += x }()
+
+	return double(x)
+}
+
+func TestTriple(t *testing.T) {
+	if triple(3) != 9 {
+		t.Errorf(`triple(3) = %#v, want %#v`, triple(3), 9)
+	}
+}
