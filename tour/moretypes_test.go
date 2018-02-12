@@ -17,11 +17,6 @@ func TestPointer(t *testing.T) {
 	i, j := 42, 2701
 
 	p = &i
-
-	if fmt.Sprintf("%T", p) != "*int" {
-		t.Fatal(": " + fmt.Sprintf("%T(%v)", fmt.Sprintf("%T", p, p)))
-	}
-
 	*p = 21
 
 	if i != 21 {
