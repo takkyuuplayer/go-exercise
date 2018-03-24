@@ -1,4 +1,4 @@
-package test
+package minna
 
 import (
 	"bytes"
@@ -6,8 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 )
-
-// go:generate go-assets-builder -s "/testdata" -p test -o test/asset.go testdata/
 
 func TestAssets(t *testing.T) {
 	f, _ := Assets.Open("/test.txt")
