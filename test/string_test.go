@@ -3,8 +3,11 @@ package test
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 	"unicode/utf8"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLen(t *testing.T) {
@@ -119,5 +122,8 @@ func TestForLoop(t *testing.T) {
 			t.Errorf(`Type of v = %T, want %s`, v, "int32")
 		}
 	}
+}
 
+func TestTrim(t *testing.T) {
+	assert.Equal(t, "Hello World", strings.Trim(" Hello World  ", " "))
 }
