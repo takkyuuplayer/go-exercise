@@ -1,5 +1,7 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/elastic/go-elasticsearch/v6 v6.8.11-0.20200928071101-eea2429a81ed h1:A0Fv4NxGicfLg+Zj+acqpnyAko2icgGmVccPQSFR1As=
+github.com/elastic/go-elasticsearch/v6 v6.8.11-0.20200928071101-eea2429a81ed/go.mod h1:UwaDJsD3rWLM5rKNFzv9hgox93HoX8utj1kxD9aFUcI=
 github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15 h1:cW/amwGEJK5MSKntPXRjX4dxs/nGxGT8gXKIsKFmHGc=
 github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15/go.mod h1:Fdm/oWRW+CH8PRbLntksCNtmcCBximKPkVQYvmMl80k=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
