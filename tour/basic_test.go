@@ -83,18 +83,18 @@ func TestBasicTypes(t *testing.T) {
 	const f = "%T(%v)"
 
 	if fmt.Sprintf(f, ToBe, ToBe) != "bool(false)" {
-		t.Fatal("%T show type")
-		t.Fatal("%V show value")
+		t.Fatalf("%%T show type")
+		t.Fatalf("%%V show value")
 	}
 
 	if fmt.Sprintf(f, MaxInt, MaxInt) != "uint64(18446744073709551615)" {
-		t.Fatal("%T show type")
-		t.Fatal("%V show value")
+		t.Fatalf("%%T show type")
+		t.Fatalf("%%V show value")
 	}
 
 	if fmt.Sprintf(f, z, z) != "complex128((2+3i))" {
-		t.Fatal("%T show type")
-		t.Fatal("%V show value")
+		t.Fatalf("%%T show type")
+		t.Fatalf("%%V show value")
 	}
 }
 
