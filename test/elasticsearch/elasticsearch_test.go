@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/elastic/go-elasticsearch/v6"
 	"github.com/elastic/go-elasticsearch/v6/esapi"
-	"log"
 	"strconv"
 	"strings"
 	"sync"
@@ -19,14 +18,7 @@ func TestEs(t *testing.T) {
 		wg sync.WaitGroup
 	)
 
-	// Initialize a client with the default settings.
-	//
-	// An `ELASTICSEARCH_URL` environment variable will be used when exported.
-	//
-	es, err := elasticsearch.NewDefaultClient()
-	if err != nil {
-		t.Fatalf("Error creating the client: %s", err)
-	}
+	es := esClient(t)
 
 	// 1. Get cluster info
 	//
@@ -35,18 +27,15 @@ func TestEs(t *testing.T) {
 		t.Fatalf("Error getting response: %s", err)
 	}
 	defer res.Body.Close()
-	// Check response status
 	if res.IsError() {
 		t.Fatalf("Error: %s", res.String())
 	}
-	// Deserialize the response into a map.
 	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
 		t.Fatalf("Error parsing the response body: %s", err)
 	}
-	// Print client and server version numbers.
-	log.Printf("Client: %s", elasticsearch.Version)
-	log.Printf("Server: %s", r["version"].(map[string]interface{})["number"])
-	log.Println(strings.Repeat("~", 37))
+	if r["version"].(map[string]interface{})["number"] != "6.0.1" {
+		t.Fatal("Server should run 6.0.1")
+	}
 
 	// 2. Index documents concurrently
 	//
@@ -79,27 +68,22 @@ func TestEs(t *testing.T) {
 			defer res.Body.Close()
 
 			if res.IsError() {
-				log.Printf("[%s] Error indexing document ID=%d", res.Status(), i+1)
-				log.Printf("%v", res)
+				t.Fatal(res.String())
 			} else {
 				// Deserialize the response into a map.
 				var r map[string]interface{}
 				if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-					log.Printf("Error parsing the response body: %s", err)
-				} else {
-					// Print the response status and indexed document version.
-					log.Printf("[%s] %s; version=%d", res.Status(), r["result"], int(r["_version"].(float64)))
+					t.Fatalf("Error parsing the response body: %s", err)
+				}
+				// Print the response status and indexed document version.
+				if res.StatusCode != 200 {
+					t.Errorf("res.StatusCode wants %d, but got %d", 200, res.StatusCode)
 				}
 			}
 		}(i, title)
 	}
 	wg.Wait()
 
-	log.Println(strings.Repeat("-", 37))
-
-	// 3. Search for the indexed documents
-	//
-	// Build the request body.
 	var buf bytes.Buffer
 	query := map[string]interface{}{
 		"query": map[string]interface{}{
@@ -142,18 +126,32 @@ func TestEs(t *testing.T) {
 	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
 		t.Fatalf("Error parsing the response body: %s", err)
 	}
-	// Print the response status, number of results, and request duration.
-	log.Printf(
-		"[%s] %d hits; took: %dms",
-		res.Status(),
-		int(r["hits"].(map[string]interface{})["total"].(float64)),
-		int(r["took"].(float64)),
-	)
-	// Print the ID and document source for each hit.
-	for _, hit := range r["hits"].(map[string]interface{})["hits"].([]interface{}) {
-		log.Printf(" * ID=%s, %s", hit.(map[string]interface{})["_id"], hit.(map[string]interface{})["_source"])
+	if res.StatusCode != 200 {
+		t.Errorf("res.StatusCode wants %d, but got %d", 200, res.StatusCode)
+	}
+	if r["hits"].(map[string]interface{})["total"].(float64) != 2 {
+		t.Errorf("hits want %d, but got %f", 2, r["hits"].(map[string]interface{})["total"].(float64))
+	}
+}
+
+func esClient(t *testing.T) *elasticsearch.Client {
+	t.Helper()
+
+	es, err := elasticsearch.NewDefaultClient()
+	if err != nil {
+		t.Fatalf("Error creating the client: %s", err)
 	}
 
-	log.Println(strings.Repeat("=", 37))
+	req := esapi.IndicesFlushRequest{}
+	res, err := req.Do(context.Background(), es)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
 
+	if res.IsError() {
+		t.Fatal(res.Status(), res.String())
+	}
+
+	return es
 }
