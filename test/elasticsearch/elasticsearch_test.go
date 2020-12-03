@@ -76,8 +76,8 @@ func TestEs(t *testing.T) {
 					t.Fatalf("Error parsing the response body: %s", err)
 				}
 				// Print the response status and indexed document version.
-				if res.StatusCode != 200 {
-					t.Errorf("res.StatusCode wants %d, but got %d", 200, res.StatusCode)
+				if res.StatusCode < 200 || 300 <= res.StatusCode {
+					t.Errorf("res.StatusCode wants 200/201, but got %d", res.StatusCode)
 				}
 			}
 		}(i, title)
@@ -140,17 +140,6 @@ func esClient(t *testing.T) *elasticsearch.Client {
 	es, err := elasticsearch.NewDefaultClient()
 	if err != nil {
 		t.Fatalf("Error creating the client: %s", err)
-	}
-
-	req := esapi.IndicesFlushRequest{}
-	res, err := req.Do(context.Background(), es)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		t.Fatal(res.Status(), res.String())
 	}
 
 	return es

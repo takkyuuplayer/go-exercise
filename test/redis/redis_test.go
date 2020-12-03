@@ -38,14 +38,13 @@ func redisDb(t *testing.T) *redis.Client {
 	t.Helper()
 
 	var db *redis.Client
-	if envURL, ok := os.LookupEnv("REDIS_URL"); ok && envURL != "" {
+	if host, ok := os.LookupEnv("REDIS_HOST"); ok && host != "" {
 		db = redis.NewClient(&redis.Options{
-			Addr: envURL,
+			Addr: host,
 		})
 	} else {
 		db = redis.NewClient(&redis.Options{})
 	}
-	db.FlushAll(context.Background())
 
 	return db
 }
