@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  app:
+    image: golang:latest
+    working_dir: /srv
+    volumes:
+      - .:/srv/
+    environment:
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+      - "REDIS_HOST=redis:6379"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    ports:
+      - 59200:9200
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  redis:
+    image: redis:4.0.10-alpine
+    ports:
+      - 56739:6379
