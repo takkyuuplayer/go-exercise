@@ -10,5 +10,5 @@ jobs:
       - run: env | sort
 
       - run: docker-compose up -d
-      - run: docker-compose exec app make lint
-      - run: docker-compose exec app make test
+      - run: make lint
+      - run: make test
