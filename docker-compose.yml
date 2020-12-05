@@ -2,7 +2,6 @@ version: "3.7"
 services:
   app:
     image: golang:latest
-    tty: true
     working_dir: /srv
     volumes:
       - .:/srv/
@@ -12,10 +11,10 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
     ports:
-      - 9200:9200
+      - 59200:9200
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
   redis:
     image: redis:4.0.10-alpine
     ports:
-      - 6739:6379
+      - 56739:6379
