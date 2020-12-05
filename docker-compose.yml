@@ -12,10 +12,10 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
     ports:
-      - 59200:9200
+      - 9200:9200
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
   redis:
     image: redis:4.0.10-alpine
     ports:
-      - 56739:6379
+      - 6739:6379
