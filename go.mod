@@ -3,6 +3,7 @@ module github.com/takkyuuplayer/go-exercise
 go 1.15
 
 require (
+	github.com/aws/aws-sdk-go v1.36.2
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/elastic/go-elasticsearch/v6 v6.8.11-0.20200928071101-eea2429a81ed
