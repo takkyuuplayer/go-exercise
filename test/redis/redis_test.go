@@ -2,9 +2,10 @@ package redis_test
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
 	"os"
 	"testing"
+
+	"github.com/go-redis/redis/v8"
 )
 
 func TestRedis(t *testing.T) {
@@ -26,11 +27,27 @@ func TestRedis(t *testing.T) {
 		t.Errorf("Result() got = %v, want %v", val, "value")
 	}
 
-	_, err = rdb.Get(ctx, "key2").Result()
-	if err == nil {
-		t.Error("key2 should not exist")
-	} else if err != redis.Nil {
-		t.Fatal(err)
+	res, err := rdb.Get(ctx, "key-does-not-exist").Result()
+	if res != "" {
+		t.Error("key-does-not-exist should not exist")
+	}
+	if err != redis.Nil {
+		t.Error("key-does-not-exist should not exist")
+	}
+}
+
+func TestRedisHash(t *testing.T) {
+	t.Parallel()
+
+	var ctx = context.Background()
+	rdb := redisDb(t)
+
+	res, err := rdb.HGetAll(ctx, "key-does-not-exist").Result()
+	if len(res) != 0 {
+		t.Error("key-does-not-exist should not exist")
+	}
+	if err != nil {
+		t.Error("key-does-not-exist should not exist")
 	}
 }
 
