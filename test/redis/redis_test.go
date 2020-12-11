@@ -42,13 +42,36 @@ func TestRedisHash(t *testing.T) {
 	var ctx = context.Background()
 	rdb := redisDb(t)
 
-	res, err := rdb.HGetAll(ctx, "key-does-not-exist").Result()
+	rdb.HSet(ctx, "hashkey", map[string]interface{}{"foo": "bar"})
+
+	res, err := rdb.HGetAll(ctx, "hashkey").Result()
+	if len(res) != 1 {
+		t.Error("hashkey should exist")
+	}
+	if err != nil {
+		t.Error("error should not exist")
+	}
+
+	t.Log(rdb.Exists(ctx, "hashkey").Result())
+	t.Log(rdb.Exists(ctx, "hashkey2").Result())
+
+	deleted, err := rdb.Del(ctx, "hashkey").Result()
+	if deleted != 1 {
+		t.Error("hashkey must be deleted")
+	}
+	if err != nil {
+		t.Error("err should not exist")
+	}
+
+	res, err = rdb.HGetAll(ctx, "key-does-not-exist").Result()
 	if len(res) != 0 {
 		t.Error("key-does-not-exist should not exist")
 	}
 	if err != nil {
 		t.Error("key-does-not-exist should not exist")
 	}
+
+	t.Log(rdb.Del(ctx, "key-does-not-exist").Result())
 }
 
 func redisDb(t *testing.T) *redis.Client {
