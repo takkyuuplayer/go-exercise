@@ -1,0 +1,8 @@
+["おはよう%sさん"]
+hash = "sha1-f2262bfb9034c75a22cd1d8fed0fa17659807e82"
+other = "Good morning {{.Name}}"
+
+["今朝はりんごを%d個食べました"]
+hash = "sha1-a00df18f06e0d04752cf97763a975cf8eff8f775"
+one = "I ate {{.PluralCount}} apple"
+other = "I ate {{.PluralCount}} apples"
