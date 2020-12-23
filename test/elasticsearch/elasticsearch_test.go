@@ -53,11 +53,11 @@ func TestEs(t *testing.T) {
 
 			// Set up the request object.
 			req := esapi.IndexRequest{
-				Index:      "test",
-				DocumentID: strconv.Itoa(i + 1),
+				Index:        "test",
+				DocumentID:   strconv.Itoa(i + 1),
 				DocumentType: "doc",
-				Body:       strings.NewReader(b.String()),
-				Refresh:    "true",
+				Body:         strings.NewReader(b.String()),
+				Refresh:      "true",
 			}
 
 			// Perform the request with the client.
@@ -83,6 +83,21 @@ func TestEs(t *testing.T) {
 		}(i, title)
 	}
 	wg.Wait()
+
+	// Index document bulk
+	bulkReq := strings.Join([]string{
+		`{ "index" : {}}`,
+		`{ "title" : "Bulk1"}`,
+		`{ "index" : {}}`,
+		`{ "title" : "Bulk2"}`,
+	}, "\n") + "\n"
+	if res, err := es.Bulk(strings.NewReader(bulkReq), es.Bulk.WithIndex("test"), es.Bulk.WithDocumentType("doc")); err != nil {
+		t.Fatal(err)
+	} else if res.IsError() {
+		t.Fatal(res.String())
+	} else {
+		t.Log(res.String())
+	}
 
 	var buf bytes.Buffer
 	query := map[string]interface{}{

@@ -1,31 +1,30 @@
 package i18n_test
 
 import (
+	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/stretchr/testify/assert"
 	"golang.org/x/text/feature/plural"
+	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"golang.org/x/text/message/catalog"
-
-	"github.com/BurntSushi/toml"
-	"github.com/stretchr/testify/assert"
-	"golang.org/x/text/language"
 	"testing"
 )
 
-var GolangMessage = map[language.Tag]*message.Printer{
-	language.Japanese: message.NewPrinter(language.Japanese),
-	language.English:  message.NewPrinter(language.English),
-}
+var GolangMessage = map[language.Tag]*message.Printer{}
 
 func init() {
-	message.SetString(language.Japanese, "おはよう%sさん", "おはよう%sさん")
-	message.SetString(language.Japanese, "今朝はりんごを%d個食べました", "今朝はりんごを%d個食べました")
+	cat := catalog.NewBuilder()
 
-	message.SetString(language.English, "おはよう%sさん", "Good morning %s")
-	message.Set(language.English, "今朝はりんごを%d個食べました",
-		catalog.Var("apples", plural.Selectf(1, "", plural.One, "apple", plural.Other, "apples")),
-		catalog.String("I ate %d ${apples} this morning"),
-	)
+	cat.SetString(language.Japanese, "おはよう%sさん", "おはよう%sさん")
+	cat.SetString(language.Japanese, "今朝はりんごを%d個食べました", "今朝はりんごを%d個食べました")
+
+	cat.SetString(language.English, "おはよう%sさん", "Good morning %s")
+	cat.SetString(language.English, "今朝はりんごを%d個食べました", "I ate %d ${apples(1)} this morning")
+	cat.SetMacro(language.English, "apples", plural.Selectf(1, "", plural.One, "apple"))
+
+	GolangMessage[language.Japanese] = message.NewPrinter(language.Japanese, message.Catalog(cat))
+	GolangMessage[language.English] = message.NewPrinter(language.English, message.Catalog(cat))
 }
 
 func TestSprintf(t *testing.T) {
@@ -33,6 +32,7 @@ func TestSprintf(t *testing.T) {
 	assert.Equal(t, "今朝はりんごを1個食べました", GolangMessage[language.Japanese].Sprintf("今朝はりんごを%d個食べました", 1))
 	assert.Equal(t, "今朝はりんごを2個食べました", GolangMessage[language.Japanese].Sprintf("今朝はりんごを%d個食べました", 2))
 	assert.Equal(t, "Good morning takkyuuplayer", GolangMessage[language.English].Sprintf("おはよう%sさん", "takkyuuplayer"))
+	GolangMessage[language.English].Sprintf("今朝はりんごを%d個食べました", 1)
 	assert.Equal(t, "I ate 1 apple this morning", GolangMessage[language.English].Sprintf("今朝はりんごを%d個食べました", 1))
 	assert.Equal(t, "I ate 2 apples this morning", GolangMessage[language.English].Sprintf("今朝はりんごを%d個食べました", 2))
 }
