@@ -29,3 +29,9 @@ func TestByteOperation(t *testing.T) {
 		t.Errorf(`b1 &^ b2 = %#v, want %#v`, b1&^b2, 4)
 	}
 }
+
+func TestByteArray(t *testing.T) {
+	bt := []byte{1, 2, 3}
+
+	t.Log(len(bt[1:1]) == 0)
+}
