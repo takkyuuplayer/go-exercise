@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 	"unicode/utf8"
@@ -126,4 +127,23 @@ func TestForLoop(t *testing.T) {
 
 func TestTrim(t *testing.T) {
 	assert.Equal(t, "Hello World", strings.Trim(" Hello World  ", " "))
+}
+
+var name = strings.Repeat(".", 100)
+var name2 = strings.Repeat(".", 100) + "あ"
+
+func BenchmarkStringsRepeat(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = strings.Repeat(".", len(name)) == name
+		_ = strings.Repeat(".", len(name2)) == name
+	}
+}
+
+var reg = regexp.MustCompile(`\A\.+\z`)
+
+func BenchmarkRegex(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = reg.MatchString(name)
+		_ = reg.MatchString(name2)
+	}
 }
