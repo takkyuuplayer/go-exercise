@@ -4,10 +4,15 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"reflect"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
 )
+
+type MySQLStruct struct {
+	Id int
+}
 
 func TestRowScan(t *testing.T) {
 	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:53306)/")
@@ -15,7 +20,7 @@ func TestRowScan(t *testing.T) {
 		panic(err)
 	}
 	rows, err := db.QueryContext(context.Background(), `
-    (SELECT 50 FROM information_schema.TABLES LIMIT 1)
+    (SELECT 50 as id FROM information_schema.TABLES LIMIT 1)
     UNION ALL
     (SELECT NULL FROM information_schema.TABLES LIMIT 1)
     `)
@@ -23,14 +28,25 @@ func TestRowScan(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	numbers := make([]*int64, 0)
+
+	var structs []*MySQLStruct
 
 	for rows.Next() {
-		var number *int64
-		if err := rows.Scan(&number); err != nil {
+		item := &MySQLStruct{}
+		field := reflect.ValueOf(item).Elem().Field(0).Interface()
+		values := []interface{}{&field}
+		if err := rows.Scan(values...); err != nil {
 			log.Fatal(err)
 		}
-		numbers = append(numbers, number)
+		if reflect.ValueOf(values[0]).IsNil() {
+			item = nil
+		} else {
+			t.Logf("%#v", reflect.ValueOf(values[0]).Elem().Type())
+			reflect.ValueOf(item).Elem().Field(0).Set(
+				reflect.ValueOf(values[0]).Elem(),
+			)
+		}
+		structs = append(structs, item)
 	}
 	// If the database is being written to ensure to check for Close
 	// errors that may be returned from the driver. The query may
@@ -44,7 +60,6 @@ func TestRowScan(t *testing.T) {
 	if err := rows.Err(); err != nil {
 		log.Fatal(err)
 	}
-	t.Log(numbers)
-	t.Log(*numbers[0])
-	t.Log(numbers[1])
+	t.Log(structs[0])
+	t.Log(structs[1])
 }

@@ -49,6 +49,6 @@ func setValueWithInterface(r interface{}) {
 	a := interface{}(int(5))
 	for i := 0; i < p.NumField(); i++ {
 		f := p.Field(i)
-		f.Set(reflect.ValueOf(a))
+		f.Set(reflect.ValueOf(&a).Elem().Elem())
 	}
 }
