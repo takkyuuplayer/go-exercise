@@ -1,22 +1,43 @@
 package main
 
 import (
-	"crypto/x509"
+	"bufio"
+	"context"
+	"crypto/tls"
 	"fmt"
+	"io/ioutil"
 	"net/http"
-	"net/url"
+	"net/http/cookiejar"
+	"os"
+	"strings"
+	"time"
 )
 
+var Transport http.RoundTripper = &http.Transport{
+	TLSClientConfig: &tls.Config{Renegotiation: tls.RenegotiateOnceAsClient},
+}
+
 func main() {
-	_, err := http.DefaultClient.Get("https://www.13hw.com/home/index.html")
+	stdin := bufio.NewScanner(os.Stdin)
+	ctx := context.Background()
+	for stdin.Scan() {
+		url := stdin.Text()
+		timeout, cancel := context.WithTimeout(ctx, 10*time.Second)
+		defer cancel()
 
-	fmt.Printf("%#v\n", err)
+		req, _ := http.NewRequestWithContext(timeout, http.MethodGet, url, nil)
+		jar, _ := cookiejar.New(nil)
+		client := http.Client{Jar: jar, Transport: Transport}
 
-	err = err.(*url.Error).Unwrap()
+		res, _ := client.Do(req)
+		defer res.Body.Close()
 
-	fmt.Printf("%#v\n", err)
+		lastUrl := res.Request.URL.String()
 
-	err = err.(x509.UnknownAuthorityError)
-
-	fmt.Printf("%#v\n", err)
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Printf("Before: %s\tAfter: %s\n", url, lastUrl)
+		fmt.Printf("Headers: %v", res.Header)
+		body, _ := ioutil.ReadAll(res.Body)
+		fmt.Printf("Body: %v", string(body))
+	}
 }
