@@ -23,10 +23,10 @@ func TestRowScan(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	numbers := make([]*int, 0)
+	numbers := make([]*int64, 0)
 
 	for rows.Next() {
-		var number *int
+		var number *int64
 		if err := rows.Scan(&number); err != nil {
 			log.Fatal(err)
 		}
