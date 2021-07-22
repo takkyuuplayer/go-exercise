@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"reflect"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -43,6 +44,43 @@ func TestScan(t *testing.T) {
 
 		users = append(users, &user)
 		groups = append(groups, &group)
+	}
+
+	assert.Len(t, users, 1)
+	assert.Len(t, groups, 1)
+	assert.Equal(t, &User{1, "user1"}, users[0])
+	assert.Equal(t, &Group{1, "group1"}, groups[0])
+}
+
+func TestScanWithReflection(t *testing.T) {
+	db := mysqlDb(t)
+
+	rows, err := db.Query(`SELECT u.*, g.* FROM users u
+    INNER JOIN group_users ug ON ug.user_id = u.id
+    INNER JOIN groups g ON g.id = ug.group_id`)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var users []*User
+	var groups []*Group
+
+	for rows.Next() {
+		var user = &User{}
+		var group = &Group{}
+		values := make([]interface{}, 4)
+		values[0] = reflect.ValueOf(user).Elem().Field(0).Addr().Interface()
+		values[1] = reflect.ValueOf(user).Elem().Field(1).Addr().Interface()
+		values[2] = reflect.ValueOf(group).Elem().Field(0).Addr().Interface()
+		values[3] = reflect.ValueOf(group).Elem().Field(1).Addr().Interface()
+
+		err := rows.Scan(values...)
+
+		assert.Nil(t, err)
+
+		users = append(users, user)
+		groups = append(groups, group)
 	}
 
 	assert.Len(t, users, 1)
