@@ -7,7 +7,10 @@ test:
 	go clean -testcache
 	go test ./...
 
-lint: golint gocyclo
+lint: vet golint gocyclo
+
+vet:
+	go vet ./...
 
 golint:
 	which golint || go get -u -v golang.org/x/lint/golint

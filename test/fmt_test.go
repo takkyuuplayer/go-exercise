@@ -4,17 +4,17 @@ import (
 	"fmt"
 )
 
-func ExamplePrintfV() {
+func ExamplePrintf_v() {
 	fmt.Printf("%v", 1)
 	// Output: 1
 }
 
-func ExamplePrintfT() {
+func ExamplePrintf_t() {
 	fmt.Printf("%T", 1)
 	// Output: int
 }
 
-func ExamplePrintfSharpV() {
+func ExamplePrintf_sharpv() {
 	fmt.Printf("%#v", "1")
 	// Output: "1"
 }
@@ -23,7 +23,7 @@ type Vertex struct {
 	X, Y int
 }
 
-func ExamplePrintStruct() {
+func ExamplePrintf_struct() {
 	v := Vertex{1, 2}
 
 	fmt.Printf("%#v", v)

@@ -29,7 +29,10 @@ func main() {
 		jar, _ := cookiejar.New(nil)
 		client := http.Client{Jar: jar, Transport: Transport}
 
-		res, _ := client.Do(req)
+		res, err := client.Do(req)
+		if err != nil {
+			panic(err)
+		}
 		defer res.Body.Close()
 
 		lastUrl := res.Request.URL.String()

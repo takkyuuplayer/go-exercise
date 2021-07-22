@@ -4,18 +4,17 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/elastic/go-elasticsearch/v6"
-	"github.com/elastic/go-elasticsearch/v6/esapi"
 	"strconv"
 	"strings"
-	"sync"
 	"testing"
+
+	"github.com/elastic/go-elasticsearch/v6"
+	"github.com/elastic/go-elasticsearch/v6/esapi"
 )
 
 func TestEs(t *testing.T) {
 	var (
-		r  map[string]interface{}
-		wg sync.WaitGroup
+		r map[string]interface{}
 	)
 
 	es := esClient(t)
@@ -37,52 +36,45 @@ func TestEs(t *testing.T) {
 		t.Fatal("Server should run 6.0.1")
 	}
 
-	// 2. Index documents concurrently
+	// 2. Index documents
 	//
 	for i, title := range []string{"Test One", "Test Two"} {
-		wg.Add(1)
+		// Build the request body.
+		var b strings.Builder
+		b.WriteString(`{"title" : "`)
+		b.WriteString(title)
+		b.WriteString(`"}`)
 
-		go func(i int, title string) {
-			defer wg.Done()
+		// Set up the request object.
+		req := esapi.IndexRequest{
+			Index:        "test",
+			DocumentID:   strconv.Itoa(i + 1),
+			DocumentType: "doc",
+			Body:         strings.NewReader(b.String()),
+			Refresh:      "true",
+		}
 
-			// Build the request body.
-			var b strings.Builder
-			b.WriteString(`{"title" : "`)
-			b.WriteString(title)
-			b.WriteString(`"}`)
+		// Perform the request with the client.
+		res, err := req.Do(context.Background(), es)
+		if err != nil {
+			t.Fatalf("Error getting response: %s", err)
+		}
+		defer res.Body.Close()
 
-			// Set up the request object.
-			req := esapi.IndexRequest{
-				Index:        "test",
-				DocumentID:   strconv.Itoa(i + 1),
-				DocumentType: "doc",
-				Body:         strings.NewReader(b.String()),
-				Refresh:      "true",
+		if res.IsError() {
+			t.Fatal(res.String())
+		} else {
+			// Deserialize the response into a map.
+			var r map[string]interface{}
+			if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+				t.Fatalf("Error parsing the response body: %s", err)
 			}
-
-			// Perform the request with the client.
-			res, err := req.Do(context.Background(), es)
-			if err != nil {
-				t.Fatalf("Error getting response: %s", err)
+			// Print the response status and indexed document version.
+			if res.StatusCode < 200 || 300 <= res.StatusCode {
+				t.Errorf("res.StatusCode wants 200/201, but got %d", res.StatusCode)
 			}
-			defer res.Body.Close()
-
-			if res.IsError() {
-				t.Fatal(res.String())
-			} else {
-				// Deserialize the response into a map.
-				var r map[string]interface{}
-				if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
-					t.Fatalf("Error parsing the response body: %s", err)
-				}
-				// Print the response status and indexed document version.
-				if res.StatusCode < 200 || 300 <= res.StatusCode {
-					t.Errorf("res.StatusCode wants 200/201, but got %d", res.StatusCode)
-				}
-			}
-		}(i, title)
+		}
 	}
-	wg.Wait()
 
 	// Index document bulk
 	bulkReq := strings.Join([]string{
