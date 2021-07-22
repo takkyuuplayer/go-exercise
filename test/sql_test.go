@@ -15,7 +15,7 @@ type MySQLStruct struct {
 	Id int
 }
 
-func TestRowScan(t *testing.T) {
+func ATestRowScan(t *testing.T) {
 	db := mysqlDb(t)
 
 	rows, err := db.QueryContext(context.Background(), `
