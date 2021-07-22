@@ -1,66 +1,54 @@
 package test
 
 import (
-	"context"
 	"database/sql"
 	"log"
 	"os"
-	"reflect"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/stretchr/testify/assert"
 )
 
-type MySQLStruct struct {
-	Id int
+type User struct {
+	Id   int
+	Name string
 }
 
-func ATestRowScan(t *testing.T) {
+type Group struct {
+	Id   int
+	Name string
+}
+
+func TestScan(t *testing.T) {
 	db := mysqlDb(t)
 
-	rows, err := db.QueryContext(context.Background(), `
-    (SELECT 50 as id FROM information_schema.TABLES LIMIT 1)
-    UNION ALL
-    (SELECT NULL FROM information_schema.TABLES LIMIT 1)
-    `)
+	rows, err := db.Query(`SELECT u.*, g.* FROM users u
+    INNER JOIN group_users ug ON ug.user_id = u.id
+    INNER JOIN groups g ON g.id = ug.group_id`)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
 
-	var structs []*MySQLStruct
+	var users []*User
+	var groups []*Group
 
 	for rows.Next() {
-		item := &MySQLStruct{}
-		field := reflect.ValueOf(item).Elem().Field(0).Interface()
-		values := []interface{}{&field}
-		if err := rows.Scan(values...); err != nil {
-			log.Fatal(err)
-		}
-		if reflect.ValueOf(values[0]).IsNil() {
-			item = nil
-		} else {
-			t.Logf("%#v", reflect.ValueOf(values[0]).Elem().Type())
-			reflect.ValueOf(item).Elem().Field(0).Set(
-				reflect.ValueOf(values[0]).Elem(),
-			)
-		}
-		structs = append(structs, item)
-	}
-	// If the database is being written to ensure to check for Close
-	// errors that may be returned from the driver. The query may
-	// encounter an auto-commit error and be forced to rollback changes.
-	rerr := rows.Close()
-	if rerr != nil {
-		log.Fatal(rerr)
+		var user User
+		var group Group
+		err := rows.Scan(&user.Id, &user.Name, &group.Id, &group.Name)
+
+		assert.Nil(t, err)
+
+		users = append(users, &user)
+		groups = append(groups, &group)
 	}
 
-	// Rows.Err will report the last error encountered by Rows.Scan.
-	if err := rows.Err(); err != nil {
-		log.Fatal(err)
-	}
-	t.Log(structs[0])
-	t.Log(structs[1])
+	assert.Len(t, users, 1)
+	assert.Len(t, groups, 1)
+	assert.Equal(t, &User{1, "user1"}, users[0])
+	assert.Equal(t, &Group{1, "group1"}, groups[0])
 }
 
 func mysqlDb(t *testing.T) *sql.DB {
@@ -70,6 +58,21 @@ func mysqlDb(t *testing.T) *sql.DB {
 		if db, err := sql.Open("mysql", dsn); err != nil {
 			t.Fatal(err)
 		} else {
+			queries := []string{
+				"SET FOREIGN_KEY_CHECKS = 0",
+				"TRUNCATE users",
+				"TRUNCATE groups",
+				"TRUNCATE group_users",
+				"SET FOREIGN_KEY_CHECKS = 1",
+				"INSERT INTO users VALUES (1, 'user1'), (2, 'user2')",
+				"INSERT INTO groups VALUES (1, 'group1')",
+				"INSERT INTO group_users VALUES (1, 1, 1)",
+			}
+			for _, query := range queries {
+				if _, err := db.Exec(query); err != nil {
+					t.Fatal(err)
+				}
+			}
 			return db
 		}
 	}
