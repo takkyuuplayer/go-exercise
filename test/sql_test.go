@@ -103,13 +103,16 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 	var users []*User
 	var groups []*Group
 
-	for rows.Next() {
-		var user = &User{}
-		var group = &Group{}
-		values := make([]interface{}, 4)
+	scan := func(rows *sql.Rows, models ...interface{}) {
+		numField := 0
+		for _, model := range models {
+			numField += reflect.ValueOf(model).Elem().Elem().NumField()
+		}
+		values := make([]interface{}, numField)
+
 		idx := 0
-		for _, model := range []interface{}{user, group} {
-			reflected := reflect.ValueOf(model).Elem()
+		for _, model := range models {
+			reflected := reflect.ValueOf(model).Elem().Elem()
 			for i := 0; i < reflected.NumField(); i++ {
 				f := reflected.Field(i)
 				value := reflect.New(reflect.PtrTo(f.Addr().Type()))
@@ -123,12 +126,14 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 		assert.Nil(t, err)
 
 		idx = 0
-		for _, model := range []interface{}{user, group} {
+		toBoNil := map[int]struct{}{}
+		for modelIdx, model := range models {
 			if reflect.ValueOf(values[idx]).Elem().IsNil() {
-				idx += reflect.ValueOf(model).Elem().NumField()
+				idx += reflect.ValueOf(model).Elem().Elem().NumField()
+				toBoNil[modelIdx] = struct{}{}
 				continue
 			}
-			reflected := reflect.ValueOf(model).Elem()
+			reflected := reflect.ValueOf(model).Elem().Elem()
 			for i := 0; i < reflected.NumField(); i++ {
 				f := reflected.Field(i)
 				f.Set(reflect.ValueOf(values[idx]).Elem().Elem().Elem())
@@ -136,10 +141,19 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 			}
 		}
 
-		users = append(users, user)
-		if reflect.ValueOf(values[2]).Elem().IsNil() {
-			group = nil
+		for modelIdx, _ := range toBoNil {
+			elem := reflect.ValueOf(models[modelIdx]).Elem()
+			elem.Set(reflect.Zero(elem.Type()))
 		}
+	}
+
+	for rows.Next() {
+		var user = &User{}
+		var group = &Group{}
+
+		scan(rows, &user, &group)
+
+		users = append(users, user)
 		groups = append(groups, group)
 	}
 
