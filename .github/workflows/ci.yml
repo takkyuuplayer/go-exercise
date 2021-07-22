@@ -12,5 +12,4 @@ jobs:
       - run: docker-compose up -d
       - run: docker-compose ps
 
-      - run: docker-compose run app make lint
       - run: docker-compose run app make test
