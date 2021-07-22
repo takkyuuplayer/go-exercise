@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"os"
 	"reflect"
 	"testing"
 
@@ -15,10 +16,8 @@ type MySQLStruct struct {
 }
 
 func TestRowScan(t *testing.T) {
-	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:53306)/")
-	if err != nil {
-		panic(err)
-	}
+	db := mysqlDb(t)
+
 	rows, err := db.QueryContext(context.Background(), `
     (SELECT 50 as id FROM information_schema.TABLES LIMIT 1)
     UNION ALL
@@ -62,4 +61,20 @@ func TestRowScan(t *testing.T) {
 	}
 	t.Log(structs[0])
 	t.Log(structs[1])
+}
+
+func mysqlDb(t *testing.T) *sql.DB {
+	t.Helper()
+
+	if dsn, ok := os.LookupEnv("MYSQL_DSN"); ok {
+		if db, err := sql.Open("mysql", dsn); err != nil {
+			t.Fatal(err)
+		} else {
+			return db
+		}
+	}
+
+	t.Fatal("No MYSQL_DSN env")
+
+	return nil
 }
