@@ -76,7 +76,7 @@ func TestSqs(t *testing.T) {
 
 	// Delete the message
 	deleted, err := svc.DeleteMessageBatch(&sqs.DeleteMessageBatchInput{
-		QueueUrl:      queue.QueueUrl,
+		QueueUrl: queue.QueueUrl,
 		Entries: []*sqs.DeleteMessageBatchRequestEntry{
 			{Id: dequeued.Messages[0].MessageId, ReceiptHandle: dequeued.Messages[0].ReceiptHandle},
 		},

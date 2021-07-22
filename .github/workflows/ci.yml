@@ -2,6 +2,17 @@ name: CI
 on: [push]
 
 jobs:
+  go-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.x'
+      - uses: actions/checkout@v2
+      - name: Check go fmt
+        run: |
+          go fmt .
+          git diff --exit-code go.mod
   go-mod:
     runs-on: ubuntu-latest
     steps:
@@ -13,6 +24,14 @@ jobs:
         run: |
           go mod tidy
           git diff --exit-code go.mod
+  go-vet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.x'
+      - uses: actions/checkout@v2
+      - run: go vet ./...
   test:
     runs-on: ubuntu-latest
     steps:
@@ -24,9 +43,3 @@ jobs:
       - run: docker-compose ps
 
       - run: docker-compose run app make test
-  golangci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
