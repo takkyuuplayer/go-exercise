@@ -126,11 +126,11 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 		assert.Nil(t, err)
 
 		idx = 0
-		toBoNil := map[int]struct{}{}
-		for modelIdx, model := range models {
+		for _, model := range models {
 			if reflect.ValueOf(values[idx]).Elem().IsNil() {
 				idx += reflect.ValueOf(model).Elem().Elem().NumField()
-				toBoNil[modelIdx] = struct{}{}
+				elem := reflect.ValueOf(model).Elem()
+				elem.Set(reflect.Zero(elem.Type()))
 				continue
 			}
 			reflected := reflect.ValueOf(model).Elem().Elem()
@@ -139,11 +139,6 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 				f.Set(reflect.ValueOf(values[idx]).Elem().Elem().Elem())
 				idx++
 			}
-		}
-
-		for modelIdx, _ := range toBoNil {
-			elem := reflect.ValueOf(models[modelIdx]).Elem()
-			elem.Set(reflect.Zero(elem.Type()))
 		}
 	}
 
