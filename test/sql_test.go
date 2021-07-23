@@ -92,30 +92,25 @@ func TestScanWithReflection(t *testing.T) {
 func TestScanLeftJoinWithReflection(t *testing.T) {
 	db := mysqlDb(t)
 
-	rows, err := db.Query(`SELECT u.*, g.* FROM users u
-    LEFT JOIN group_users ug ON ug.user_id = u.id
-    LEFT JOIN groups g ON g.id = ug.group_id`)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	var users []*User
-	var groups []*Group
-
 	scan := func(rows *sql.Rows, models ...interface{}) {
-		numField := 0
-		for _, model := range models {
-			numField += reflect.ValueOf(model).Elem().Elem().NumField()
+		sum := 0
+		numFields := map[int]int{}
+		types := map[int]reflect.Type{}
+		for modelIdx, model := range models {
+			types[modelIdx] = reflect.TypeOf(model).Elem().Elem() // model
+			numFields[modelIdx] = types[modelIdx].NumField()
+			sum += numFields[modelIdx]
 		}
-		values := make([]interface{}, numField)
+		values := make([]interface{}, sum)
 
 		idx := 0
-		for _, model := range models {
-			reflected := reflect.ValueOf(model).Elem().Elem()
-			for i := 0; i < reflected.NumField(); i++ {
-				f := reflected.Field(i)
-				value := reflect.New(reflect.PtrTo(f.Addr().Type()))
+		elements := make([]reflect.Value, len(models))
+		for modelIdx, _ := range models {
+			elem := reflect.New(types[modelIdx]).Elem() // model
+			elements[modelIdx] = elem
+			for i := 0; i < numFields[modelIdx]; i++ {
+				f := elem.Field(i)
+				value := reflect.New(f.Addr().Type()) // **(model.field)
 				values[idx] = value.Interface()
 				idx++
 			}
@@ -126,38 +121,82 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 		assert.Nil(t, err)
 
 		idx = 0
-		for _, model := range models {
+		for modelIdx, model := range models {
 			if reflect.ValueOf(values[idx]).Elem().IsNil() {
-				idx += reflect.ValueOf(model).Elem().Elem().NumField()
+				idx += numFields[modelIdx]
 				elem := reflect.ValueOf(model).Elem()
 				elem.Set(reflect.Zero(elem.Type()))
 				continue
 			}
-			reflected := reflect.ValueOf(model).Elem().Elem()
-			for i := 0; i < reflected.NumField(); i++ {
-				f := reflected.Field(i)
-				f.Set(reflect.ValueOf(values[idx]).Elem().Elem().Elem())
+			elem := reflect.New(types[modelIdx]) // *model
+			for i := 0; i < numFields[modelIdx]; i++ {
+				f := elem.Elem().Field(i)
+				f.Set(reflect.ValueOf(values[idx]).Elem().Elem())
 				idx++
 			}
+			reflect.ValueOf(model).Elem().Set(elem)
 		}
 	}
 
-	for rows.Next() {
-		var user = &User{}
-		var group = &Group{}
+	t.Run("using *model", func(t *testing.T) {
+		rows, err := db.Query(`SELECT u.*, g.* FROM users u
+        LEFT JOIN group_users ug ON ug.user_id = u.id
+        LEFT JOIN groups g ON g.id = ug.group_id`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
 
-		scan(rows, &user, &group)
+		var users []*User
+		var groups []*Group
 
-		users = append(users, user)
-		groups = append(groups, group)
-	}
+		for rows.Next() {
+			var user *User
+			var group *Group
 
-	assert.Len(t, users, 2)
-	assert.Len(t, groups, 2)
-	assert.Equal(t, &User{1, "user1"}, users[0])
-	assert.Equal(t, &Group{1, "group1"}, groups[0])
-	assert.Equal(t, &User{2, "user2"}, users[1])
-	assert.Equal(t, (*Group)(nil), groups[1])
+			scan(rows, &user, &group)
+
+			users = append(users, user)
+			groups = append(groups, group)
+		}
+
+		assert.Len(t, users, 2)
+		assert.Len(t, groups, 2)
+		assert.Equal(t, &User{1, "user1"}, users[0])
+		assert.Equal(t, &Group{1, "group1"}, groups[0])
+		assert.Equal(t, &User{2, "user2"}, users[1])
+		assert.Equal(t, (*Group)(nil), groups[1])
+	})
+
+	t.Run("using &model{}", func(t *testing.T) {
+		rows, err := db.Query(`SELECT u.*, g.* FROM users u
+        LEFT JOIN group_users ug ON ug.user_id = u.id
+        LEFT JOIN groups g ON g.id = ug.group_id`)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var users []*User
+		var groups []*Group
+
+		for rows.Next() {
+			user := &User{}
+			group := &Group{}
+
+			scan(rows, &user, &group)
+
+			users = append(users, user)
+			groups = append(groups, group)
+		}
+
+		assert.Len(t, users, 2)
+		assert.Len(t, groups, 2)
+		assert.Equal(t, &User{1, "user1"}, users[0])
+		assert.Equal(t, &Group{1, "group1"}, groups[0])
+		assert.Equal(t, &User{2, "user2"}, users[1])
+		assert.Equal(t, (*Group)(nil), groups[1])
+	})
 }
 
 func mysqlDb(t *testing.T) *sql.DB {
