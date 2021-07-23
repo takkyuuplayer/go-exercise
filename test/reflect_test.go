@@ -11,6 +11,20 @@ type MyStruct struct {
 	A int
 }
 
+func TestType(t *testing.T) {
+	var a *MyStruct
+
+	f := func(models ...interface{}) {
+		for _, model := range models {
+			assert.Equal(t, 1, reflect.TypeOf(model).Elem().Elem().NumField())
+		}
+	}
+
+	f(&a)
+	a = &MyStruct{}
+	f(&a)
+}
+
 func TestSetting(t *testing.T) {
 	a := &MyStruct{}
 
