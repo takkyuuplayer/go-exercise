@@ -1,6 +1,6 @@
 module github.com/takkyuuplayer/go-exercise
 
-go 1.16
+go 1.18
 
 require (
 	github.com/BurntSushi/toml v0.3.1
@@ -12,6 +12,7 @@ require (
 	github.com/labstack/echo/v4 v4.4.0
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/text v0.3.6
-	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e
+	golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b // indirect
+	golang.org/x/text v0.3.7
+	golang.org/x/tools v0.1.11
 )
