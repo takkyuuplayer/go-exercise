@@ -12,7 +12,7 @@ jobs:
       - name: Check go fmt
         run: |
           go fmt .
-          git diff --exit-code go.mod
+          git diff --exit-code
   go-mod:
     runs-on: ubuntu-latest
     steps:
@@ -23,7 +23,8 @@ jobs:
       - name: Check go mod
         run: |
           go mod tidy
-          git diff --exit-code go.mod
+          go mod download
+          git diff --exit-code
   go-vet:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +40,6 @@ jobs:
         with:
           go-version: '1.x'
       - uses: actions/checkout@v2
-      - run: docker-compose up -d
-      - run: docker-compose ps
-
-      - run: docker-compose run app make test
+      - run: make compose/up
+      - run: docker compose ps
+      - run: docker compose run app make test

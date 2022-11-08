@@ -12,6 +12,11 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - MYSQL_DSN=root@tcp(mysql:3306)/testdb
+    depends_on:
+      - elasticsearch
+      - localstack
+      - mysql
+      - redis
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
     ports:
