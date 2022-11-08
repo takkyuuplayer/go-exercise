@@ -9,7 +9,7 @@ compose/down:
 update:
 	go get -u all
 	go mod tidy
-	go mod download
+	go mod download all
 
 test:
 	go clean -testcache
