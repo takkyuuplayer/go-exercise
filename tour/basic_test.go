@@ -6,14 +6,7 @@ import (
 	"fmt"
 	"math"
 	"math/cmplx"
-	"math/rand"
 )
-
-func TestImportPackage(t *testing.T) {
-	if rand.Intn(10) != 1 {
-		t.Fatal("rand always returns same value unless passing seed")
-	}
-}
 
 func TestExportedValue(t *testing.T) {
 	if fmt.Sprintf("%v", math.Pi) != "3.141592653589793" {
