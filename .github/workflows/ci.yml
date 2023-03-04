@@ -30,6 +30,6 @@ jobs:
           go-version-file: "go.mod"
           cache: true
 
+      - run: sleep 10s
       - run: docker compose ps
-
       - run: make test
