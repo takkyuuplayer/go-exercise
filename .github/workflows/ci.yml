@@ -30,5 +30,14 @@ jobs:
         with:
           go-version-file: "go.mod"
           cache: true
-      - uses: falti/dotenv-action@v1.0.4
+      - uses: iFaxity/wait-on-action@v1
+        with:
+          resource: 127.0.0.1:56739
+      - uses: iFaxity/wait-on-action@v1
+        with:
+          resource: 127.0.0.1:56739
+      - uses: iFaxity/wait-on-action@v1
+        with:
+          resource: 127.0.0.1:56739
+
       - run: make test
