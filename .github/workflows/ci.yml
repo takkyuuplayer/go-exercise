@@ -32,12 +32,12 @@ jobs:
           cache: true
       - uses: iFaxity/wait-on-action@v1
         with:
-          resource: 127.0.0.1:56739
+          resource: localhost:59200
       - uses: iFaxity/wait-on-action@v1
         with:
-          resource: 127.0.0.1:56739
+          resource: localhost:53306
       - uses: iFaxity/wait-on-action@v1
         with:
-          resource: 127.0.0.1:56739
+          resource: localhost:56739
 
       - run: make test
