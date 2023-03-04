@@ -25,10 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: make compose/up
-      - run: docker compose ps
       - uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
           cache: true
-      - uses: falti/dotenv-action@v1.0.4
+
+      - run: sleep 10s
+      - run: docker compose ps
       - run: make test

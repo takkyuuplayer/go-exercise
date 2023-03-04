@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 .PHONY: test
 
 compose/up:
@@ -14,4 +15,4 @@ update:
 
 test:
 	go clean -testcache
-	go test ./...
+	set -a; source .env; go test ./...
