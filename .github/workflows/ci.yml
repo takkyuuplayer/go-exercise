@@ -30,14 +30,6 @@ jobs:
         with:
           go-version-file: "go.mod"
           cache: true
-      - uses: iFaxity/wait-on-action@v1
-        with:
-          resource: localhost:59200
-      - uses: iFaxity/wait-on-action@v1
-        with:
-          resource: localhost:53306
-      - uses: iFaxity/wait-on-action@v1
-        with:
-          resource: localhost:56739
 
+      - run: sleep 15s
       - run: make test
