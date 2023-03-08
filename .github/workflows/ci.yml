@@ -22,7 +22,7 @@ jobs:
       - run: go vet ./...
       - uses: dominikh/staticcheck-action@v1.2.0
         with:
-		      install-go: false
+          install-go: false
   test:
     runs-on: ubuntu-latest
     steps:
