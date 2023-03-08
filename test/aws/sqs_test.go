@@ -37,7 +37,7 @@ func TestSqs(t *testing.T) {
 	t.Logf("%v", queue)
 
 	// Enqueue
-	enqueued, err := svc.SendMessage(&sqs.SendMessageInput{
+	enqueued, _ := svc.SendMessage(&sqs.SendMessageInput{
 		MessageAttributes: map[string]*sqs.MessageAttributeValue{
 			"Title": &sqs.MessageAttributeValue{
 				DataType:    aws.String("String"),
@@ -58,7 +58,7 @@ func TestSqs(t *testing.T) {
 	t.Logf("%v", enqueued)
 
 	// Dequeue
-	dequeued, err := svc.ReceiveMessage(&sqs.ReceiveMessageInput{
+	dequeued, _ := svc.ReceiveMessage(&sqs.ReceiveMessageInput{
 		AttributeNames: []*string{
 			aws.String(sqs.MessageSystemAttributeNameSentTimestamp),
 		},
@@ -75,7 +75,7 @@ func TestSqs(t *testing.T) {
 	t.Logf("%v", dequeued)
 
 	// Delete the message
-	deleted, err := svc.DeleteMessageBatch(&sqs.DeleteMessageBatchInput{
+	deleted, _ := svc.DeleteMessageBatch(&sqs.DeleteMessageBatchInput{
 		QueueUrl: queue.QueueUrl,
 		Entries: []*sqs.DeleteMessageBatchRequestEntry{
 			{Id: dequeued.Messages[0].MessageId, ReceiptHandle: dequeued.Messages[0].ReceiptHandle},

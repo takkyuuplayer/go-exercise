@@ -19,9 +19,7 @@ func TestFoo(t *testing.T) {
 			end = size
 		}
 		var units []int
-		for _, val := range data[start:end] {
-			units = append(units, val)
-		}
+		units = append(units, data[start:end]...)
 		fmt.Println(units)
 	}
 }

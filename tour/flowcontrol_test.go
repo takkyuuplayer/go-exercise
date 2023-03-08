@@ -1,10 +1,10 @@
 package tour
 
-import "testing"
 import (
 	"fmt"
 	"math"
 	"runtime"
+	"testing"
 )
 
 func TestForLoop(t *testing.T) {
@@ -58,21 +58,4 @@ func TestSwitch(t *testing.T) {
 	default:
 		fmt.Printf("%s. ", os)
 	}
-}
-
-func deferStatement() {
-	defer fmt.Println("World")
-
-	fmt.Println("Hello")
-}
-
-func deferStack() {
-	fmt.Println("counting")
-
-	for i := 0; i < 10; i++ {
-		defer fmt.Println(i)
-	}
-
-	fmt.Println("done")
-
 }

@@ -5,7 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"os"
@@ -40,7 +40,7 @@ func main() {
 		fmt.Println(strings.Repeat("-", 50))
 		fmt.Printf("Before: %s\tAfter: %s\n", url, lastUrl)
 		fmt.Printf("Headers: %v", res.Header)
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 		fmt.Printf("Body: %v", string(body))
 	}
 }

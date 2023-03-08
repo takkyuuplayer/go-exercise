@@ -1,11 +1,10 @@
 package tour
 
-import "testing"
-
 import (
 	"fmt"
 	"math"
 	"math/cmplx"
+	"testing"
 )
 
 func TestExportedValue(t *testing.T) {
@@ -48,7 +47,7 @@ func TestNamedReturn(t *testing.T) {
 	}
 }
 
-var c, python, java bool
+var c bool
 
 func TestVariable(t *testing.T) {
 	var i int

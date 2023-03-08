@@ -1,10 +1,9 @@
 package tour
 
-import "testing"
-
 import (
 	"fmt"
 	"math"
+	"testing"
 )
 
 func TestPointer(t *testing.T) {
@@ -182,14 +181,18 @@ func TestRange(t *testing.T) {
 		if val != 1 {
 			t.Fatal("1st val should be value: " + fmt.Sprintf("%T(%v)", val, val))
 		}
-		break
+		if true {
+			break
+		}
 	}
 
 	for _, val := range pow {
 		if val != 1 {
 			t.Fatal("index is ignored: " + fmt.Sprintf("%T(%v)", val, val))
 		}
-		break
+		if true {
+			break
+		}
 	}
 }
 
