@@ -19,7 +19,7 @@ jobs:
           go mod tidy
           go mod download all
           git diff --exit-code
-      - run: go vet ./...
+      - run: "go vet ./..."
       - uses: dominikh/staticcheck-action@v1.2.0
 	      with:
 		      install-go: false
