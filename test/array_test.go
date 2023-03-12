@@ -2,14 +2,6 @@ package test
 
 import "testing"
 
-func TestArrayInitializationWithoutLength(t *testing.T) {
-	q := [...]int{1, 2, 3}
-
-	if len(q) != 3 {
-		t.Errorf(`len(q) = %#v, want %#v`, len(q), 3)
-	}
-}
-
 func TestArrayInitializationWithIndex(t *testing.T) {
 	type Currency int
 

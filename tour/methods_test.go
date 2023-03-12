@@ -120,7 +120,7 @@ func TestTypeAssertions(t *testing.T) {
 		t.Fatal("This is string: " + fmt.Sprintf("%T(%v)", fmt.Sprintf("%T(%v)", s, s), fmt.Sprintf("%T(%v)", s, s)))
 	}
 
-	s, ok := i.(string)
+	_, ok := i.(string)
 
 	if ok != true {
 		t.Fatal("it is string: " + fmt.Sprintf("%T(%v)", ok, ok))

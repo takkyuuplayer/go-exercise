@@ -105,7 +105,7 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 
 		idx := 0
 		elements := make([]reflect.Value, len(models))
-		for modelIdx, _ := range models {
+		for modelIdx := range models {
 			elem := reflect.New(types[modelIdx]).Elem() // model
 			elements[modelIdx] = elem
 			for i := 0; i < numFields[modelIdx]; i++ {
