@@ -1,7 +1,5 @@
 name: Update Dependencies
-on:
-  schedule:
-    - cron: "10 15 * * *"
+on: [push]
 
 jobs:
   lint:
