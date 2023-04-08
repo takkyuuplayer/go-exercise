@@ -1,8 +1,7 @@
 name: Update Dependencies
 on:
-  push:
   schedule:
-    - cron: "0 15 1 * *"
+    - cron: "0 0 1 * *"
 
 jobs:
   update:
