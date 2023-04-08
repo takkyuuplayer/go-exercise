@@ -2,7 +2,7 @@ name: Update Dependencies
 on:
   push:
   schedule:
-    - cron: "10 15 * * *"
+    - cron: "0 15 1 * *"
 
 jobs:
   update:
@@ -29,8 +29,18 @@ jobs:
 
       - uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           commit-message: "Update dependencies"
           title: "Update dependencies"
           branch: "update-dependencies"
           delete-branch: true
+          body: |
+            Run
+
+            ```
+            $ git fetch --all
+            $ git checkout update-dependencies
+            $ git reset --hard origin/update-dependencies
+            $ git commit --allow-empty -m "run ci"
+            $ git push
+            ```
