@@ -5,10 +5,11 @@ on:
     - cron: "10 15 * * *"
 
 jobs:
-  lint:
+  update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: make compose/up
       - uses: actions/setup-go@v3
         with:
           go-version-file: "go.mod"
