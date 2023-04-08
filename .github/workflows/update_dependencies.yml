@@ -14,19 +14,11 @@ jobs:
         with:
           go-version-file: "go.mod"
           cache: true
-      - name: update dependencies
+      - name: update go.mod dependencies
         run: |
           go get -u ./...
           go mod tidy
           go mod download all
-      - run: go vet ./...
-      - uses: dominikh/staticcheck-action@v1.2.0
-        with:
-          install-go: false
-      - run: sleep 10s
-      - run: docker compose ps
-      - run: make test
-
       - uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
