@@ -26,6 +26,7 @@ jobs:
           title: "Update dependencies"
           branch: "update-dependencies"
           delete-branch: true
+          reviewers: takkyuuplayer
           body: |
             Run
 
