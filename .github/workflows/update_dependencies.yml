@@ -14,13 +14,10 @@ jobs:
           go-version-file: "go.mod"
           cache: true
       - name: update go.mod dependencies
-        run: |
-          go get -u ./...
-          go mod tidy
-          go mod download all
+        run: make update
       - uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update dependencies"
           title: "Update dependencies"
           branch: "update-dependencies"
