@@ -2,9 +2,10 @@ package test_test
 
 import (
 	"crypto/x509"
-	"github.com/stretchr/testify/assert"
 	"net/url"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestErrorCast(t *testing.T) {

@@ -1,3 +1,6 @@
+GOIMPORTS:=go run golang.org/x/tools/cmd/goimports@latest
+STATICCHECK:=go run honnef.co/go/tools/cmd/staticcheck@latest
+
 SHELL=/bin/bash
 .PHONY: test
 
@@ -6,6 +9,12 @@ compose/up:
 
 compose/down:
 	docker compose down --remove-orphans
+
+fmt:
+	$(GOIMPORTS) -w .
+
+staticcheck:
+	$(STATICCHECK) ./...
 
 update:
 	go mod edit -go=$(shell go env GOVERSION | sed 's/^go//' | sed -e 's/.[0-9]$+$$//g')

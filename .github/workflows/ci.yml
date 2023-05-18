@@ -12,7 +12,7 @@ jobs:
           cache: true
       - name: go fmt .
         run: |
-          go fmt .
+          make fmt
           git diff --exit-code
       - name: go mod
         run: |
@@ -20,9 +20,8 @@ jobs:
           go mod download all
           git diff --exit-code
       - run: go vet ./...
-      - uses: dominikh/staticcheck-action@v1.2.0
-        with:
-          install-go: false
+      - run: make staticcheck
+
   test:
     runs-on: ubuntu-latest
     steps:
