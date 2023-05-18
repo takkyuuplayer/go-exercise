@@ -1,6 +1,8 @@
 package i18n_test
 
 import (
+	"testing"
+
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/stretchr/testify/assert"
@@ -8,7 +10,6 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"golang.org/x/text/message/catalog"
-	"testing"
 )
 
 var GolangMessage = map[language.Tag]*message.Printer{}
