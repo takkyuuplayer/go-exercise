@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/aws/aws-sdk-go v1.44.132
-	github.com/elastic/go-elasticsearch/v8 v8.8.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
@@ -22,7 +21,6 @@ require (
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/elastic/elastic-transport-go/v8 v8.0.0-20230329154755-1a3c63de0db6 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
