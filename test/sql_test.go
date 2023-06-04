@@ -25,8 +25,8 @@ func TestScan(t *testing.T) {
 	db := mysqlDb(t)
 
 	rows, err := db.Query(`SELECT u.*, g.* FROM users u
-    INNER JOIN group_users ug ON ug.user_id = u.id
-    INNER JOIN groups g ON g.id = ug.group_id`)
+    INNER JOIN group_users ug ON ug.user_id = u.id ` +
+		"INNER JOIN `groups` g ON g.id = ug.group_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,8 +56,8 @@ func TestScanWithReflection(t *testing.T) {
 	db := mysqlDb(t)
 
 	rows, err := db.Query(`SELECT u.*, g.* FROM users u
-    INNER JOIN group_users ug ON ug.user_id = u.id
-    INNER JOIN groups g ON g.id = ug.group_id`)
+    INNER JOIN group_users ug ON ug.user_id = u.id ` +
+		"INNER JOIN `groups` g ON g.id = ug.group_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -140,8 +140,8 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 
 	t.Run("using *model", func(t *testing.T) {
 		rows, err := db.Query(`SELECT u.*, g.* FROM users u
-        LEFT JOIN group_users ug ON ug.user_id = u.id
-        LEFT JOIN groups g ON g.id = ug.group_id`)
+        LEFT JOIN group_users ug ON ug.user_id = u.id ` +
+			"LEFT JOIN `groups` g ON g.id = ug.group_id")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -170,8 +170,8 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 
 	t.Run("using &model{}", func(t *testing.T) {
 		rows, err := db.Query(`SELECT u.*, g.* FROM users u
-        LEFT JOIN group_users ug ON ug.user_id = u.id
-        LEFT JOIN groups g ON g.id = ug.group_id`)
+        LEFT JOIN group_users ug ON ug.user_id = u.id ` +
+			"LEFT JOIN `groups` g ON g.id = ug.group_id")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -208,13 +208,13 @@ func mysqlDb(t *testing.T) *sql.DB {
 		} else {
 			queries := []string{
 				"SET FOREIGN_KEY_CHECKS = 0",
-				"TRUNCATE users",
-				"TRUNCATE groups",
-				"TRUNCATE group_users",
+				"TRUNCATE `users`",
+				"TRUNCATE `groups`",
+				"TRUNCATE `group_users`",
 				"SET FOREIGN_KEY_CHECKS = 1",
-				"INSERT INTO users VALUES (1, 'user1'), (2, 'user2')",
-				"INSERT INTO groups VALUES (1, 'group1')",
-				"INSERT INTO group_users VALUES (1, 1, 1)",
+				"INSERT INTO `users` VALUES (1, 'user1'), (2, 'user2')",
+				"INSERT INTO `groups` VALUES (1, 'group1')",
+				"INSERT INTO `group_users` VALUES (1, 1, 1)",
 			}
 			for _, query := range queries {
 				if _, err := db.Exec(query); err != nil {

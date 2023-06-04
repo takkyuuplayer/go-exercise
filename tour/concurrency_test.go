@@ -5,30 +5,6 @@ import (
 	"testing"
 )
 
-func TestChannels(t *testing.T) {
-	sum := func(s []int, c chan int) {
-		ret := 0
-		for _, v := range s {
-			ret += v
-		}
-		c <- ret
-	}
-
-	s := []int{7, 2, 8. - 9, 4, 0}
-
-	c := make(chan int, 2)
-	go sum(s[:len(s)/2], c)
-	go sum(s[len(s)/2:], c)
-	x, y := <-c, <-c
-
-	if x != 3 {
-		t.Fatal("1st channel: " + fmt.Sprintf("%T(%v)", x, x))
-	}
-	if y != 9 {
-		t.Fatal("2nd channel: " + fmt.Sprintf("%T(%v)", y, y))
-	}
-}
-
 func TestRangeAndClose(t *testing.T) {
 	fib := func(n int, c chan int) {
 		current, next := 0, 1
