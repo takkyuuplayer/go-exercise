@@ -9,9 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type exqlDB exql.DB
+
 type (
 	DB struct {
-		exql.DB
+		exqlDB
 	}
 )
 
