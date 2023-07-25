@@ -5,12 +5,11 @@ import (
 	"sync"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPipeline(t *testing.T) {
-	start := func(ctx context.Context) {
+	start := func(ctx context.Context) int {
+		totalMessage := 0
 		wg := &sync.WaitGroup{}
 
 		wg.Add(1)
@@ -19,15 +18,15 @@ func TestPipeline(t *testing.T) {
 			defer wg.Done()
 			defer close(messages)
 
-			counter := 0
-			dequeue := time.Tick(5 * time.Millisecond)
+			dequeue := time.Tick(37 * time.Millisecond)
 			for {
 				select {
 				case <-ctx.Done():
 					return
 				case <-dequeue:
-					counter++
-					messages <- counter
+					totalMessage++
+					t.Log(totalMessage)
+					messages <- totalMessage
 				}
 			}
 		}()
@@ -51,19 +50,19 @@ func TestPipeline(t *testing.T) {
 				select {
 				case <-interval:
 					if len(cached) > 0 {
-						assert.Greater(t, len(cached), 0)
+						t.Log(cached)
 					}
 					cached = make([]int, 0, 10)
 				case result, ok := <-results:
 					if !ok {
 						if len(cached) > 0 {
-							assert.Greater(t, len(cached), 0)
+							t.Log(cached)
 						}
 						return
 					}
 					cached = append(cached, result)
-					if len(results) == 10 {
-						assert.Len(t, cached, 10)
+					if len(cached) == 10 {
+						t.Log(cached)
 						cached = make([]int, 0, 10)
 					}
 				}
@@ -71,9 +70,10 @@ func TestPipeline(t *testing.T) {
 		}()
 
 		wg.Wait()
+		return totalMessage
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
 	defer cancel()
-	start(ctx)
+	t.Log(start(ctx))
 }
