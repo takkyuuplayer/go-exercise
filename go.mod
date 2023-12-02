@@ -1,6 +1,6 @@
 module github.com/takkyuuplayer/go-exercise
 
-go 1.20
+go 1.21
 
 require (
 	github.com/BurntSushi/toml v1.2.1
@@ -12,9 +12,10 @@ require (
 	github.com/loilo-inc/exql/v2 v2.0.0
 	github.com/nicksnyder/go-i18n/v2 v2.2.1
 	github.com/playwright-community/playwright-go v0.2000.1
+	github.com/slack-go/slack v0.12.3
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/text v0.13.0
-	golang.org/x/tools v0.13.0
+	golang.org/x/text v0.14.0
+	golang.org/x/tools v0.16.0
 )
 
 require (
@@ -33,13 +34,12 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
-	github.com/slack-go/slack v0.12.3 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	golang.org/x/crypto v0.13.0 // indirect
-	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/net v0.15.0 // indirect
-	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/crypto v0.16.0 // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/net v0.19.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
