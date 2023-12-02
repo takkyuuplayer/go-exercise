@@ -5,7 +5,7 @@ SHELL=/bin/bash
 .PHONY: test
 
 compose/up:
-	docker compose up -d --pull --build
+	docker compose up -d --pull always --build
 
 compose/down:
 	docker compose down --remove-orphans

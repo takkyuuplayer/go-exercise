@@ -5,11 +5,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
         with:
           go-version-file: "go.mod"
-          cache: true
       - name: go fmt .
         run: |
           make fmt
@@ -21,17 +20,21 @@ jobs:
           git diff --exit-code
       - run: go vet ./...
       - run: make staticcheck
-
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: make compose/up
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v4
         with:
           go-version-file: "go.mod"
-          cache: true
-
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright-go
+            ~/.cache/ms-playwright
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
       - run: sleep 10s
       - run: docker compose ps
       - run: make test
