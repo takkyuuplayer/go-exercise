@@ -15,7 +15,7 @@ require (
 	github.com/slack-go/slack v0.12.3
 	github.com/stretchr/testify v1.8.1
 	golang.org/x/text v0.14.0
-	golang.org/x/tools v0.16.0
+	golang.org/x/tools v0.16.1
 )
 
 require (
