@@ -20,6 +20,7 @@ func (v *Vertex) Scale(f float64) {
 }
 
 func TestMethodsForStruct(t *testing.T) {
+	t.Parallel()
 	v := Vertex{3, 4}
 
 	if v.Abs() != 5 {
@@ -28,6 +29,7 @@ func TestMethodsForStruct(t *testing.T) {
 }
 
 func TestPointerReceivers(t *testing.T) {
+	t.Parallel()
 	v := Vertex{3, 4}
 
 	v.Scale(10)
@@ -47,6 +49,7 @@ func (f MyFloat) Abs() float64 {
 }
 
 func TestMethodsForType(t *testing.T) {
+	t.Parallel()
 	f := MyFloat(-2)
 
 	if f.Abs() != 2 {
@@ -60,6 +63,7 @@ type Abser interface {
 }
 
 func TestInterface(t *testing.T) {
+	t.Parallel()
 	var a Abser
 
 	a = MyFloat(-2)
@@ -76,6 +80,7 @@ func TestInterface(t *testing.T) {
 }
 
 func TestInterfaceWithNil(t *testing.T) {
+	t.Parallel()
 	var i Abser
 
 	if fmt.Sprintf("%T(%v)", i, i) != "<nil>(<nil>)" {
@@ -92,6 +97,7 @@ func TestInterfaceWithNil(t *testing.T) {
 }
 
 func TestEmptyInterface(t *testing.T) {
+	t.Parallel()
 	var i interface{}
 
 	i = 42
@@ -108,6 +114,7 @@ func TestEmptyInterface(t *testing.T) {
 }
 
 func TestTypeAssertions(t *testing.T) {
+	t.Parallel()
 	var i interface{} = "hello"
 
 	if fmt.Sprintf("%T(%v)", i, i) != "string(hello)" {
@@ -137,6 +144,7 @@ func TestTypeAssertions(t *testing.T) {
 }
 
 func TestTypeSwitches(t *testing.T) {
+	t.Parallel()
 	var i interface{} = 24
 
 	switch v := i.(type) {
@@ -156,6 +164,7 @@ func (p Person) String() string {
 }
 
 func TestStringerInterface(t *testing.T) {
+	t.Parallel()
 	a := Person{"Arthur Dent", 42}
 
 	if fmt.Sprintf("%v", a) != "Arthur Dent (42 years)" {

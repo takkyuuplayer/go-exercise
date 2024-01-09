@@ -12,6 +12,7 @@ import (
 )
 
 func TestLen(t *testing.T) {
+	t.Parallel()
 	s := "hello, world"
 
 	if len(s) != 12 {
@@ -28,6 +29,7 @@ func TestLen(t *testing.T) {
 }
 
 func TestSubString(t *testing.T) {
+	t.Parallel()
 	s := "hello, world"
 
 	if s[:5] != "hello" {
@@ -36,6 +38,7 @@ func TestSubString(t *testing.T) {
 }
 
 func TestStringModification(t *testing.T) {
+	t.Parallel()
 	a := "left"
 	b := a
 	a += ", right"
@@ -50,6 +53,7 @@ func TestStringModification(t *testing.T) {
 }
 
 func TestByteCode(t *testing.T) {
+	t.Parallel()
 	if "\xff" != "\377" {
 		t.Errorf(`"\xff" = %#v, want %#v`, "\xff", "\377")
 	}
@@ -61,6 +65,7 @@ func TestByteCode(t *testing.T) {
 }
 
 func TestStringToByte(t *testing.T) {
+	t.Parallel()
 	org := "abcd"
 	a := []byte(org)
 	copy(a[1:2], []byte(" "))
@@ -75,6 +80,7 @@ func TestStringToByte(t *testing.T) {
 }
 
 func TestUnicode(t *testing.T) {
+	t.Parallel()
 	if "\xe4\xb8\x96\xe7\x95\x8c" != "世界" {
 		t.Errorf(`"\xe4\xb8\x96\xe7\x95\x8c" = %#v, want %#v`, "\xe4\xb8\x96\xe7\x95\x8c", "世界")
 	}
@@ -89,6 +95,7 @@ func TestUnicode(t *testing.T) {
 }
 
 func TestUTF8(t *testing.T) {
+	t.Parallel()
 	s := "Hello, 世界"
 
 	if len(s) != 13 {
@@ -112,6 +119,7 @@ func TestUTF8(t *testing.T) {
 }
 
 func TestForLoop(t *testing.T) {
+	t.Parallel()
 	if fmt.Sprintf("%T", 'a') != "int32" {
 		t.Errorf(`Type of 'a' = %T, want %s`, 'a', "int32")
 	}
@@ -126,6 +134,7 @@ func TestForLoop(t *testing.T) {
 }
 
 func TestTrim(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, "Hello World", strings.Trim(" Hello World  ", " "))
 }
 

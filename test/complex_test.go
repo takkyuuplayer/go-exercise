@@ -6,6 +6,7 @@ import (
 )
 
 func TestComplex(t *testing.T) {
+	t.Parallel()
 	x := complex(1, 2)
 	y := complex(3, 4)
 
@@ -23,6 +24,7 @@ func TestComplex(t *testing.T) {
 }
 
 func TestSqrt(t *testing.T) {
+	t.Parallel()
 	if cmplx.Sqrt(-1) != complex(0, 1) {
 		t.Errorf(`cmplx.Sqrt(-1) = %#v, want %#v`, cmplx.Sqrt(-1), complex(0, 1))
 	}

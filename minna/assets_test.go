@@ -8,6 +8,7 @@ import (
 )
 
 func TestAssets(t *testing.T) {
+	t.Parallel()
 	f, _ := Assets.Open("/test.txt")
 
 	buf := new(bytes.Buffer)

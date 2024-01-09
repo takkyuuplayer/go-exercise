@@ -1,5 +1,13 @@
 name: CI
-on: [push]
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   lint:
@@ -13,13 +21,21 @@ jobs:
         run: |
           make fmt
           git diff --exit-code
+      - name: t.Parallel チェック
+        run: |
+          make tparagen
+          git diff --exit-code
       - name: go mod
         run: |
           go mod tidy
           go mod download all
           git diff --exit-code
       - run: go vet ./...
-      - run: make staticcheck
+      - name: staticcheck
+        uses: dominikh/staticcheck-action@v1.3.0
+        with:
+          install-go: false
+
   test:
     runs-on: ubuntu-latest
     steps:

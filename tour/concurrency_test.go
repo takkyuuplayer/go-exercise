@@ -6,6 +6,7 @@ import (
 )
 
 func TestRangeAndClose(t *testing.T) {
+	t.Parallel()
 	fib := func(n int, c chan int) {
 		current, next := 0, 1
 
@@ -32,6 +33,7 @@ func TestRangeAndClose(t *testing.T) {
 }
 
 func TestSelect(t *testing.T) {
+	t.Parallel()
 	fib := func(c, quit chan int) {
 		current, next := 0, 1
 

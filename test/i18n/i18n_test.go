@@ -29,6 +29,7 @@ func init() {
 }
 
 func TestSprintf(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, "おはようtakkyuuplayerさん", GolangMessage[language.Japanese].Sprintf("おはよう%sさん", "takkyuuplayer"))
 	assert.Equal(t, "今朝はりんごを1個食べました", GolangMessage[language.Japanese].Sprintf("今朝はりんごを%d個食べました", 1))
 	assert.Equal(t, "今朝はりんごを2個食べました", GolangMessage[language.Japanese].Sprintf("今朝はりんごを%d個食べました", 2))
@@ -65,6 +66,7 @@ func init() {
 }
 
 func TestMustLocalize(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, "おはようtakkyuuplayerさん",
 		Localizer[language.Japanese].MustLocalize(
 			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]interface{}{"Name": "takkyuuplayer"}},

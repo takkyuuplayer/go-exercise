@@ -6,6 +6,7 @@ import (
 )
 
 func TestByteOperation(t *testing.T) {
+	t.Parallel()
 	b1, _ := strconv.ParseInt("1100", 2, 0)
 	b2, _ := strconv.ParseInt("1010", 2, 0)
 
@@ -31,6 +32,7 @@ func TestByteOperation(t *testing.T) {
 }
 
 func TestByteArray(t *testing.T) {
+	t.Parallel()
 	bt := []byte{1, 2, 3}
 
 	t.Log(len(bt[1:1]) == 0)

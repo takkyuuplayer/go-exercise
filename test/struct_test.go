@@ -10,6 +10,7 @@ type Employee struct {
 }
 
 func TestPointer(t *testing.T) {
+	t.Parallel()
 	emp := Employee{
 		Name:  "Takkyuu",
 		Phone: "11122223333",
@@ -31,6 +32,7 @@ func TestPointer(t *testing.T) {
 }
 
 func TestCompare(t *testing.T) {
+	t.Parallel()
 	type point struct{ x, y int }
 
 	p1 := point{1, 2}
@@ -48,6 +50,7 @@ func TestCompare(t *testing.T) {
 }
 
 func TestEmbedding(t *testing.T) {
+	t.Parallel()
 	type Point struct {
 		X, Y int
 	}

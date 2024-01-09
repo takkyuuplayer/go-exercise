@@ -23,6 +23,7 @@ func (p *Point) ScaleBy(k float64) {
 }
 
 func TestMethodWithCopiedValue(t *testing.T) {
+	t.Parallel()
 	p1 := Point{1, 1}
 	p2 := Point{4, 5}
 
@@ -32,6 +33,7 @@ func TestMethodWithCopiedValue(t *testing.T) {
 }
 
 func TestMethodWithPointer(t *testing.T) {
+	t.Parallel()
 	p := Point{1, 1}
 	p.ScaleBy(3)
 
@@ -41,6 +43,7 @@ func TestMethodWithPointer(t *testing.T) {
 }
 
 func TestHasARelation(t *testing.T) {
+	t.Parallel()
 	p1 := ColoredPoint{Point{1, 1}, color.RGBA{255, 0, 0, 255}}
 	p2 := ColoredPoint{Point{4, 5}, color.RGBA{255, 0, 0, 255}}
 
@@ -50,6 +53,7 @@ func TestHasARelation(t *testing.T) {
 }
 
 func TestMethodExpression(t *testing.T) {
+	t.Parallel()
 	p1 := Point{1, 1}
 	p2 := Point{4, 5}
 

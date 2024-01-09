@@ -6,6 +6,7 @@ import (
 )
 
 func TestNaN(t *testing.T) {
+	t.Parallel()
 	nan := math.NaN()
 
 	if math.IsNaN(nan) == false {

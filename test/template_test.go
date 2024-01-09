@@ -9,6 +9,7 @@ import (
 )
 
 func TestTemplate(t *testing.T) {
+	t.Parallel()
 	tpl := template.Must(template.New("foo").Parse(`<a href="{{.Url}}"></a>`))
 	data := map[string]string{
 		"Url": "https://example.com/?a=あいうえお&b=https://takkyuuplayer.com/",

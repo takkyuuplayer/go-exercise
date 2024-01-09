@@ -3,6 +3,7 @@ package test
 import "testing"
 
 func TestConstant(t *testing.T) {
+	t.Parallel()
 	const (
 		a = 1
 		b
@@ -28,6 +29,7 @@ func TestConstant(t *testing.T) {
 }
 
 func TestAutoIncrement(t *testing.T) {
+	t.Parallel()
 	const (
 		zero = iota
 		one
@@ -45,6 +47,7 @@ func TestAutoIncrement(t *testing.T) {
 }
 
 func TestAutoBitShift(t *testing.T) {
+	t.Parallel()
 	const (
 		one = 1 << iota
 		two

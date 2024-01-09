@@ -18,6 +18,7 @@ type (
 )
 
 func TestEmbedding(t *testing.T) {
+	t.Parallel()
 	db, err := exql.Open(&exql.OpenOptions{Url: os.Getenv("MYSQL_DSN")})
 	assert.NoError(t, err)
 

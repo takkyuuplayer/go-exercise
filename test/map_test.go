@@ -6,6 +6,7 @@ import (
 )
 
 func TestMapZeroValue(t *testing.T) {
+	t.Parallel()
 	m := map[string]int{
 		"alice": 32,
 		"bob":   30,
@@ -32,6 +33,7 @@ func TestMapZeroValue(t *testing.T) {
 }
 
 func TestMultiMap(t *testing.T) {
+	t.Parallel()
 	m := map[string]map[string]bool{}
 
 	if m["a"]["b"] != false {

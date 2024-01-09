@@ -3,6 +3,7 @@ package test
 import "testing"
 
 func TestArrayInitializationWithIndex(t *testing.T) {
+	t.Parallel()
 	type Currency int
 
 	const (
@@ -27,6 +28,7 @@ func TestArrayInitializationWithIndex(t *testing.T) {
 }
 
 func TestArrayInitializationWithSkippingIndex(t *testing.T) {
+	t.Parallel()
 	r := [...]int{99: -1}
 
 	if len(r) != 100 {

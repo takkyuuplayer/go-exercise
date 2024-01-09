@@ -30,6 +30,7 @@ func (b *strB) MethodZ() string {
 }
 
 func TestInterfaceEmbedding(t *testing.T) {
+	t.Parallel()
 	a := &strA{}
 
 	assert.Equal(t, "A: MethodY", a.MethodY())

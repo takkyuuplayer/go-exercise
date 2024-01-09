@@ -8,6 +8,7 @@ import (
 )
 
 func TestXMLUnmarshal(t *testing.T) {
+	t.Parallel()
 	type Email struct {
 		Where string `xml:"where,attr"`
 		Addr  string
