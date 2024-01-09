@@ -12,6 +12,7 @@ type MyStruct struct {
 }
 
 func TestType(t *testing.T) {
+	t.Parallel()
 	var a *MyStruct
 
 	f := func(models ...interface{}) {
@@ -26,6 +27,7 @@ func TestType(t *testing.T) {
 }
 
 func TestSetting(t *testing.T) {
+	t.Parallel()
 	a := &MyStruct{}
 
 	wipePassed(&a)

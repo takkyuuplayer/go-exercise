@@ -8,6 +8,7 @@ import (
 )
 
 func TestExportedValue(t *testing.T) {
+	t.Parallel()
 	if fmt.Sprintf("%v", math.Pi) != "3.141592653589793" {
 		t.Fatal("To access exported value, use Capital character")
 	}
@@ -18,6 +19,7 @@ func add(x, y int) int {
 }
 
 func TestFunction(t *testing.T) {
+	t.Parallel()
 	if add(42, 13) != 55 {
 		t.Fatal("function can be defined")
 	}
@@ -28,6 +30,7 @@ func swap(x, y string) (string, string) {
 }
 
 func TestMultipleResults(t *testing.T) {
+	t.Parallel()
 	a, b := swap("hello", "world")
 	if a != "world" && b != "hello" {
 		t.Fatal("function can return multiple values")
@@ -41,6 +44,7 @@ func split(sum int) (ret1, ret2 int) {
 }
 
 func TestNamedReturn(t *testing.T) {
+	t.Parallel()
 	a, b := split(17)
 	if a != 7 && b != 10 {
 		t.Fatal("function can return named values")
@@ -50,6 +54,7 @@ func TestNamedReturn(t *testing.T) {
 var c bool
 
 func TestVariable(t *testing.T) {
+	t.Parallel()
 	var i int
 
 	if i != 0 || c != false {
@@ -58,6 +63,7 @@ func TestVariable(t *testing.T) {
 }
 
 func TestVariableDeclaration(t *testing.T) {
+	t.Parallel()
 	i := 3
 	j, k := 4, 5
 
@@ -67,6 +73,7 @@ func TestVariableDeclaration(t *testing.T) {
 }
 
 func TestBasicTypes(t *testing.T) {
+	t.Parallel()
 	var (
 		ToBe   bool       = false
 		MaxInt uint64     = 1<<64 - 1
@@ -91,6 +98,7 @@ func TestBasicTypes(t *testing.T) {
 }
 
 func TestZeroValues(t *testing.T) {
+	t.Parallel()
 	var i int
 	var f float64
 	var b bool
@@ -114,6 +122,7 @@ func TestZeroValues(t *testing.T) {
 }
 
 func TestCasting(t *testing.T) {
+	t.Parallel()
 	var x, y int = 3, 4
 	var f float64 = math.Sqrt(float64(x*x + y*y))
 	var z uint = uint(f)
@@ -128,6 +137,7 @@ func TestCasting(t *testing.T) {
 }
 
 func TestTypeInference(t *testing.T) {
+	t.Parallel()
 	v := 42
 
 	if fmt.Sprintf("%T", v) != "int" {
@@ -136,6 +146,7 @@ func TestTypeInference(t *testing.T) {
 }
 
 func TestConstant(t *testing.T) {
+	t.Parallel()
 	const World = "世界"
 
 	if fmt.Sprintf("%v", World) != "世界" {

@@ -7,12 +7,14 @@ import (
 )
 
 func TestUTFMax(t *testing.T) {
+	t.Parallel()
 	if utf8.UTFMax != 4 { // 4 byte
 		t.Errorf(`utf8.UTFMax = %#v, want %#v`, utf8.UTFMax, 4)
 	}
 }
 
 func TestRuneLen(t *testing.T) {
+	t.Parallel()
 	if utf8.RuneLen(' ') != 1 {
 		t.Errorf(`utf8.RuneLen(' ') = %#v, want %#v`, utf8.RuneLen(' '), 1)
 	}
@@ -27,6 +29,7 @@ func TestRuneLen(t *testing.T) {
 }
 
 func TestIsSpace(t *testing.T) {
+	t.Parallel()
 	if unicode.IsSpace(' ') != true {
 		t.Errorf(`unicode.IsSpace(' ") = %#v, want %#v`, unicode.IsSpace(' '), true)
 	}

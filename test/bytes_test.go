@@ -12,6 +12,7 @@ import (
 )
 
 func TestEmurateStdinOut(t *testing.T) {
+	t.Parallel()
 	in := strings.NewReader("test")
 	var out bytes.Buffer
 

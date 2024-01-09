@@ -8,6 +8,7 @@ import (
 )
 
 func TestChromium(t *testing.T) {
+	t.Parallel()
 	runOptions := &playwright.RunOptions{
 		Browsers: []string{"chromium"},
 	}

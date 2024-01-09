@@ -21,6 +21,7 @@ func argumentMap(m map[string]int) map[string]int {
 }
 
 func TestWhenArgumentsAreValue(t *testing.T) {
+	t.Parallel()
 	a, b := 1, 2
 	x := incrementAdd(a, b)
 
@@ -38,6 +39,7 @@ func TestWhenArgumentsAreValue(t *testing.T) {
 }
 
 func TestWhenArgumentsAreReference(t *testing.T) {
+	t.Parallel()
 	m := map[string]int{
 		"test": 0,
 		"foo":  1,
@@ -55,6 +57,7 @@ func TestWhenArgumentsAreReference(t *testing.T) {
 }
 
 func TestNamedReturnValue(t *testing.T) {
+	t.Parallel()
 	x, y := calc(2, 1)
 
 	if x != 3 {
@@ -71,6 +74,7 @@ func multiValues() (int, int) {
 }
 
 func TestMultiValues(t *testing.T) {
+	t.Parallel()
 	x := incrementAdd(multiValues())
 
 	if x != 5 {
@@ -79,6 +83,7 @@ func TestMultiValues(t *testing.T) {
 }
 
 func TestFunctionValues(t *testing.T) {
+	t.Parallel()
 	var x func(int, int) int
 
 	if x != nil {
@@ -93,6 +98,7 @@ func TestFunctionValues(t *testing.T) {
 }
 
 func TestCapturingIterationVariables(t *testing.T) {
+	t.Parallel()
 	var f []func() int
 
 	for i := 0; i < 10; i++ {

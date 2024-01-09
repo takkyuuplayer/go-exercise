@@ -8,6 +8,7 @@ import (
 )
 
 func TestForLoop(t *testing.T) {
+	t.Parallel()
 	sum := 0
 
 	for i := 0; i < 10; i++ {
@@ -20,6 +21,7 @@ func TestForLoop(t *testing.T) {
 }
 
 func TestWhileLoop(t *testing.T) {
+	t.Parallel()
 	sum := 1
 	for sum < 1000 {
 		sum += sum
@@ -39,12 +41,14 @@ func pow(x, n, lim float64) float64 {
 }
 
 func TestIfStatement(t *testing.T) {
+	t.Parallel()
 	if fmt.Sprintf("%v", pow(2, 10, 60)) != "60" {
 		t.Fatal("variable can be defined in if block: " + fmt.Sprintf("%v", pow(2, 10, 60)))
 	}
 }
 
 func TestSwitch(t *testing.T) {
+	t.Parallel()
 
 	switch os := runtime.GOOS; os {
 	case "darwin":

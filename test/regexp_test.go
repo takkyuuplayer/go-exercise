@@ -7,6 +7,7 @@ import (
 )
 
 func TestMatchString(t *testing.T) {
+	t.Parallel()
 	var validID = regexp.MustCompile(`^[a-z]+\[[0-9]+\]$`)
 
 	if validID.MatchString("a") != false {
@@ -18,6 +19,7 @@ func TestMatchString(t *testing.T) {
 }
 
 func TestFindAllString(t *testing.T) {
+	t.Parallel()
 	re := regexp.MustCompile("a.")
 
 	if !reflect.DeepEqual([]string{"ar", "an", "al"}, re.FindAllString("paranormal", -1)) {
@@ -36,6 +38,7 @@ func TestFindAllString(t *testing.T) {
 }
 
 func TestFindStringSubmatch(t *testing.T) {
+	t.Parallel()
 	re := regexp.MustCompile("a(x*)b(y|z)c")
 
 	if !reflect.DeepEqual(re.FindStringSubmatch("-axxxbyc-"), []string{"axxxbyc", "xxx", "y"}) {

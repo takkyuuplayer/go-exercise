@@ -13,6 +13,7 @@ func deferIncrementX() func() {
 }
 
 func TestDefer(t *testing.T) {
+	t.Parallel()
 	defer incrementX() // 4
 
 	if x != 0 {
@@ -51,6 +52,7 @@ func triple(x int) (result int) {
 }
 
 func TestTriple(t *testing.T) {
+	t.Parallel()
 	if triple(3) != 9 {
 		t.Errorf(`triple(3) = %#v, want %#v`, triple(3), 9)
 	}

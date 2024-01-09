@@ -6,6 +6,7 @@ import (
 )
 
 func TestSlice(t *testing.T) {
+	t.Parallel()
 	a := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
 	b := a[2:5]
 
@@ -23,6 +24,7 @@ func TestSlice(t *testing.T) {
 }
 
 func TestZeroValue(t *testing.T) {
+	t.Parallel()
 	var a []int
 
 	if a != nil {
@@ -41,6 +43,7 @@ func TestZeroValue(t *testing.T) {
 }
 
 func TestSliceIsReference(t *testing.T) {
+	t.Parallel()
 	a := [...]int{1, 2, 3}
 
 	b := a[1:]
@@ -56,6 +59,7 @@ func TestSliceIsReference(t *testing.T) {
 }
 
 func TestAppend(t *testing.T) {
+	t.Parallel()
 	origin := [...]int{0, 1, 2, 3}
 
 	a := origin[:2]
@@ -95,6 +99,7 @@ func TestAppend(t *testing.T) {
 }
 
 func TestCopy(t *testing.T) {
+	t.Parallel()
 	a := []int{1, 2, 3}
 	b := []int{4, 5, 6}
 

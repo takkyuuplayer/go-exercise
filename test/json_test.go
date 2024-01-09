@@ -8,7 +8,9 @@ import (
 )
 
 func TestMarshal(t *testing.T) {
+	t.Parallel()
 	t.Run("- is ignored", func(t *testing.T) {
+		t.Parallel()
 		var params struct {
 			P1 bool
 			P2 bool `json:"-"`
@@ -21,7 +23,9 @@ func TestMarshal(t *testing.T) {
 }
 
 func TestUnmarshal(t *testing.T) {
+	t.Parallel()
 	t.Run("null to boolean", func(t *testing.T) {
+		t.Parallel()
 		code := `{"bool_field": null}`
 		var params struct {
 			BoolField bool `json:"bool_field"`

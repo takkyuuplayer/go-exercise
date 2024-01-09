@@ -7,6 +7,7 @@ import (
 )
 
 func TestPointer(t *testing.T) {
+	t.Parallel()
 	var p *int
 
 	if p != nil {
@@ -31,6 +32,7 @@ func TestPointer(t *testing.T) {
 }
 
 func TestStruct(t *testing.T) {
+	t.Parallel()
 	v := Vertex{1, 2}
 
 	v.X = 4
@@ -45,6 +47,7 @@ func TestStruct(t *testing.T) {
 }
 
 func TestPointerOfStruct(t *testing.T) {
+	t.Parallel()
 	v := Vertex{1, 2}
 
 	p := &v
@@ -65,6 +68,7 @@ func TestPointerOfStruct(t *testing.T) {
 }
 
 func TestStructLiterals(t *testing.T) {
+	t.Parallel()
 	v2 := Vertex{X: 1}
 
 	if v2.X != 1 {
@@ -77,6 +81,7 @@ func TestStructLiterals(t *testing.T) {
 }
 
 func TestArray(t *testing.T) {
+	t.Parallel()
 	var a [2]string
 
 	a[0] = "Hello"
@@ -88,6 +93,7 @@ func TestArray(t *testing.T) {
 }
 
 func TestSlices(t *testing.T) {
+	t.Parallel()
 	primes := [6]int{2, 3, 5, 7, 11, 13}
 
 	var s []int = primes[1:4]
@@ -102,6 +108,7 @@ func TestSlices(t *testing.T) {
 }
 
 func TestSliceLiterals(t *testing.T) {
+	t.Parallel()
 	primes := []int{2, 3, 5, 7, 11, 13}
 
 	if primes[1] != 3 {
@@ -110,6 +117,7 @@ func TestSliceLiterals(t *testing.T) {
 }
 
 func TestSliceNil(t *testing.T) {
+	t.Parallel()
 
 	var s []int
 
@@ -119,6 +127,7 @@ func TestSliceNil(t *testing.T) {
 }
 
 func TestSliceWithMake(t *testing.T) {
+	t.Parallel()
 	a := make([]int, 5)
 
 	if a[0] != 0 {
@@ -143,6 +152,7 @@ func TestSliceWithMake(t *testing.T) {
 }
 
 func TestAppend(t *testing.T) {
+	t.Parallel()
 	var s []int
 
 	if len(s) != 0 {
@@ -172,6 +182,7 @@ func TestAppend(t *testing.T) {
 }
 
 func TestRange(t *testing.T) {
+	t.Parallel()
 	pow := []int{1, 2, 4, 8, 16, 32, 64, 128}
 
 	for idx, val := range pow {
@@ -197,6 +208,7 @@ func TestRange(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
+	t.Parallel()
 	var m map[string]int
 
 	if m != nil {
@@ -212,6 +224,7 @@ func TestMap(t *testing.T) {
 }
 
 func TestMapLiterals(t *testing.T) {
+	t.Parallel()
 	m := map[string]int{
 		"one": 1,
 		"two": 2,
@@ -223,6 +236,7 @@ func TestMapLiterals(t *testing.T) {
 }
 
 func TestMapWithInferring(t *testing.T) {
+	t.Parallel()
 	m := map[string]Vertex{
 		"O": {0, 0},
 		"A": {1, 0},
@@ -235,6 +249,7 @@ func TestMapWithInferring(t *testing.T) {
 }
 
 func TestMapOperation(t *testing.T) {
+	t.Parallel()
 	m := map[string]int{
 		"one": 1,
 		"two": 2,
@@ -260,6 +275,7 @@ func TestMapOperation(t *testing.T) {
 }
 
 func TestFunctionValues(t *testing.T) {
+	t.Parallel()
 	hypot := func(x, y float64) float64 {
 		return math.Sqrt(x*x + y*y)
 	}

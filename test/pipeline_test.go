@@ -8,6 +8,7 @@ import (
 )
 
 func TestPipeline(t *testing.T) {
+	t.Parallel()
 	start := func(ctx context.Context) int {
 		totalMessage := 0
 		wg := &sync.WaitGroup{}

@@ -22,6 +22,7 @@ type Group struct {
 }
 
 func TestScan(t *testing.T) {
+	t.Parallel()
 	db := mysqlDb(t)
 
 	rows, err := db.Query(`SELECT u.*, g.* FROM users u
@@ -53,6 +54,7 @@ func TestScan(t *testing.T) {
 }
 
 func TestScanWithReflection(t *testing.T) {
+	t.Parallel()
 	db := mysqlDb(t)
 
 	rows, err := db.Query(`SELECT u.*, g.* FROM users u
@@ -90,6 +92,7 @@ func TestScanWithReflection(t *testing.T) {
 }
 
 func TestScanLeftJoinWithReflection(t *testing.T) {
+	t.Parallel()
 	db := mysqlDb(t)
 
 	scan := func(rows *sql.Rows, models ...interface{}) {
@@ -139,6 +142,7 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 	}
 
 	t.Run("using *model", func(t *testing.T) {
+		t.Parallel()
 		rows, err := db.Query(`SELECT u.*, g.* FROM users u
         LEFT JOIN group_users ug ON ug.user_id = u.id ` +
 			"LEFT JOIN `groups` g ON g.id = ug.group_id")
@@ -169,6 +173,7 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 	})
 
 	t.Run("using &model{}", func(t *testing.T) {
+		t.Parallel()
 		rows, err := db.Query(`SELECT u.*, g.* FROM users u
         LEFT JOIN group_users ug ON ug.user_id = u.id ` +
 			"LEFT JOIN `groups` g ON g.id = ug.group_id")

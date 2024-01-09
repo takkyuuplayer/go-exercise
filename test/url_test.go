@@ -8,7 +8,9 @@ import (
 )
 
 func TestParse(t *testing.T) {
+	t.Parallel()
 	t.Run("Parse", func(t *testing.T) {
+		t.Parallel()
 		u, _ := url.Parse("http://あ.example/い?search=う#え")
 
 		assert.Equal(

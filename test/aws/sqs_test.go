@@ -10,6 +10,7 @@ import (
 )
 
 func TestSqs(t *testing.T) {
+	t.Parallel()
 	svc := sqs.New(getSession(t))
 
 	// Create a queue

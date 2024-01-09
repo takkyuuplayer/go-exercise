@@ -6,6 +6,7 @@ import (
 )
 
 func TestFoo(t *testing.T) {
+	t.Parallel()
 	data := make([]int, 25)
 	size := len(data)
 	for i := 0; i < size; i++ {

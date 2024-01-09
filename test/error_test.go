@@ -9,6 +9,7 @@ import (
 )
 
 func TestErrorCast(t *testing.T) {
+	t.Parallel()
 	var err error = &url.Error{
 		Err: &x509.UnknownAuthorityError{},
 	}
