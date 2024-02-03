@@ -3,6 +3,7 @@ package bigquery_test
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"testing"
 
@@ -30,7 +31,7 @@ func TestClient(t *testing.T) {
 		})
 
 		// Create dataset
-		dataset := client.Dataset(ulid.Make().String())
+		dataset := client.Dataset("dataset_" + ulid.Make().String())
 		assert.NoError(
 			t,
 			dataset.Create(context.Background(), nil),
@@ -53,17 +54,61 @@ func TestClient(t *testing.T) {
 		}
 
 		// Create table
+		table := client.Dataset(dataset.DatasetID).Table("tmp_" + ulid.Make().String())
+		assert.NoError(
+			t,
+			table.Create(ctx, &bigquery.TableMetadata{
+				Schema: bigquery.Schema{
+					{Name: "name", Type: bigquery.StringFieldType},
+					{Name: "age", Type: bigquery.IntegerFieldType},
+				},
+			}),
+		)
+
+		// List tables
 		{
-			table := client.Dataset(dataset.DatasetID).Table(ulid.Make().String())
+			it := dataset.Tables(ctx)
+			for {
+				tbl, err := it.Next()
+				if errors.Is(err, iterator.Done) {
+					break
+				}
+				assert.NoError(t, err)
+				t.Log(tbl.TableID)
+			}
+		}
+
+		//	Insert data
+		{
+			inserter := table.Inserter()
+			type Item struct {
+				Name string `bigquery:"name"`
+				Age  int    `bigquery:"age"`
+			}
 			assert.NoError(
 				t,
-				table.Create(ctx, &bigquery.TableMetadata{
-					Schema: bigquery.Schema{
-						{Name: "name", Type: bigquery.StringFieldType},
-						{Name: "age", Type: bigquery.IntegerFieldType},
-					},
+				inserter.Put(ctx, []*Item{
+					{"Alice", 20},
+					{"Bob", 18},
 				}),
 			)
+		}
+
+		// Query data
+		{
+			query := fmt.Sprintf("SELECT * FROM %s.%s", dataset.DatasetID, table.TableID)
+			q := client.Query(query)
+			it, err := q.Read(ctx)
+			assert.NoError(t, err)
+			for {
+				var row []bigquery.Value
+				err := it.Next(&row)
+				if errors.Is(err, iterator.Done) {
+					break
+				}
+				assert.NoError(t, err)
+				t.Log(row)
+			}
 		}
 	})
 }
