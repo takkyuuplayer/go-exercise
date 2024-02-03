@@ -1,14 +1,17 @@
 version: "3.7"
 services:
   redis:
+    init: true
     image: redis
     ports:
       - 56739:6379
   localstack:
+    init: true
     image: localstack/localstack
     ports:
       - 4566:4566
   mysql:
+    init: true
     image: mysql
     ports:
       - 53306:3306
@@ -17,4 +20,11 @@ services:
       - MYSQL_DATABASE=testdb
     volumes:
       - ./testdata/schema:/docker-entrypoint-initdb.d
-
+  bigquery:
+    init: true
+    image: ghcr.io/goccy/bigquery-emulator
+    platform: linux/amd64
+    command: |
+      --project=test
+    ports:
+      - 9050:9050
