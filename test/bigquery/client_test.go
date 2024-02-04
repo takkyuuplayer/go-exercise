@@ -4,23 +4,26 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"testing"
 
 	"cloud.google.com/go/bigquery"
 	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/api/iterator"
+	"google.golang.org/api/option"
 )
 
 func TestClient(t *testing.T) {
 	t.Parallel()
 
 	t.Run("CRUD", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 		client, err := bigquery.NewClient(
 			ctx,
-			"tp-learning",
-			//option.WithEndpoint(os.Getenv("BIGQUERY_ENDPOINT")),
+			"test",
+			option.WithEndpoint(os.Getenv("BIGQUERY_ENDPOINT")),
 		)
 		assert.NoError(t, err)
 		t.Cleanup(func() {
@@ -110,7 +113,9 @@ func TestClient(t *testing.T) {
 		}
 
 		// Merge data
-		{
+		t.Run("Merge", func(t *testing.T) {
+			t.Skip("Not working in emulator")
+
 			t2 := client.Dataset(dataset.DatasetID).Table("tmp_" + ulid.Make().String())
 			assert.NoError(
 				t,
@@ -160,23 +165,23 @@ WHEN NOT MATCHED THEN
 				assert.NoError(t, err)
 				fmt.Println(row)
 			}
-		}
 
-		// Query data
-		{
-			query := fmt.Sprintf("SELECT * FROM `%s.copy_table`", dataset.DatasetID)
-			q := client.Query(query)
-			it, err := q.Read(ctx)
-			assert.NoError(t, err)
-			for {
-				var row []bigquery.Value
-				err := it.Next(&row)
-				if errors.Is(err, iterator.Done) {
-					break
-				}
+			// Query data
+			{
+				query := fmt.Sprintf("SELECT * FROM `%s.copy_table`", dataset.DatasetID)
+				q := client.Query(query)
+				it, err := q.Read(ctx)
 				assert.NoError(t, err)
-				t.Log(row)
+				for {
+					var row []bigquery.Value
+					err := it.Next(&row)
+					if errors.Is(err, iterator.Done) {
+						break
+					}
+					assert.NoError(t, err)
+					t.Log(row)
+				}
 			}
-		}
+		})
 	})
 }
