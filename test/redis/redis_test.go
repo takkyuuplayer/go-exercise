@@ -73,7 +73,6 @@ func TestRedisHash(t *testing.T) {
 
 	t.Run("struct", func(t *testing.T) {
 		t.Parallel()
-
 		type Sample struct {
 			Foo   string      `json:"foo" redis:"foo"`
 			Slice StringSlice `json:"slice" redis:"slice"`
@@ -84,10 +83,10 @@ func TestRedisHash(t *testing.T) {
 			Slice: []string{"a", "b", "c"},
 		}
 
-		assert.NoError(t, rdb.HSet(ctx, "hashkey", s).Err())
+		assert.NoError(t, rdb.HSet(ctx, "hashkey2", s).Err())
 
 		var sample Sample
-		err := rdb.HGetAll(ctx, "hashkey").Scan(&sample)
+		err := rdb.HGetAll(ctx, "hashkey2").Scan(&sample)
 		assert.Equal(t, s, sample)
 		assert.NoError(t, err)
 
@@ -97,7 +96,7 @@ func TestRedisHash(t *testing.T) {
 		assert.NoError(t, err)
 
 		var sample3 Sample
-		res := rdb.HGetAll(ctx, "hashkey")
+		res := rdb.HGetAll(ctx, "hashkey2")
 		hash, err := res.Result()
 		t.Log(hash, err)
 		assert.NoError(t, err)
