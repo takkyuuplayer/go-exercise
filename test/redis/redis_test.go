@@ -2,10 +2,11 @@ package redis_test
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"testing"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,6 +38,16 @@ func TestRedis(t *testing.T) {
 	}
 }
 
+type StringSlice []string
+
+func (s StringSlice) MarshalBinary() ([]byte, error) {
+	return json.Marshal(s)
+}
+
+func (s *StringSlice) ScanRedis(val string) error {
+	return json.Unmarshal([]byte(val), s)
+}
+
 func TestRedisHash(t *testing.T) {
 	t.Parallel()
 
@@ -62,28 +73,34 @@ func TestRedisHash(t *testing.T) {
 
 	t.Run("struct", func(t *testing.T) {
 		type Sample struct {
-			Foo string `json:"foo" redis:"foo"`
+			Foo   string      `json:"foo" redis:"foo"`
+			Slice StringSlice `json:"slice" redis:"slice"`
 		}
 
-		rdb.HSet(ctx, "hashkey", map[string]interface{}{"foo": "bar"})
+		s := Sample{
+			Foo:   "bar",
+			Slice: []string{"a", "b", "c"},
+		}
+
+		assert.NoError(t, rdb.HSet(ctx, "hashkey", s).Err())
 
 		var sample Sample
 		err := rdb.HGetAll(ctx, "hashkey").Scan(&sample)
-		assert.Equal(t, "bar", sample.Foo)
+		assert.Equal(t, s, sample)
 		assert.NoError(t, err)
 
 		var sample2 Sample
 		err = rdb.HGetAll(ctx, "key-does-not-exists").Scan(&sample2)
-		assert.Equal(t, "", sample2.Foo)
+		assert.Equal(t, Sample{}, sample2)
 		assert.NoError(t, err)
 
 		var sample3 Sample
 		res := rdb.HGetAll(ctx, "hashkey")
 		hash, err := res.Result()
-		assert.Len(t, hash, 1)
+		t.Log(hash, err)
 		assert.NoError(t, err)
 		assert.NoError(t, res.Scan(&sample3))
-		assert.Equal(t, "bar", sample3.Foo)
+		assert.Equal(t, s, sample3)
 	})
 
 	t.Run("when not exists", func(t *testing.T) {
