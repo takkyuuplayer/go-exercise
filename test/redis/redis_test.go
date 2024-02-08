@@ -2,10 +2,12 @@ package redis_test
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"testing"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRedis(t *testing.T) {
@@ -36,42 +38,82 @@ func TestRedis(t *testing.T) {
 	}
 }
 
+type StringSlice []string
+
+func (s StringSlice) MarshalBinary() ([]byte, error) {
+	return json.Marshal(s)
+}
+
+func (s *StringSlice) ScanRedis(val string) error {
+	return json.Unmarshal([]byte(val), s)
+}
+
 func TestRedisHash(t *testing.T) {
 	t.Parallel()
 
 	var ctx = context.Background()
 	rdb := redisDb(t)
 
-	rdb.HSet(ctx, "hashkey", map[string]interface{}{"foo": "bar"})
+	t.Run("when exists", func(t *testing.T) {
+		t.Parallel()
 
-	res, err := rdb.HGetAll(ctx, "hashkey").Result()
-	if len(res) != 1 {
-		t.Error("hashkey should exist")
-	}
-	if err != nil {
-		t.Error("error should not exist")
-	}
+		rdb.HSet(ctx, "hashkey", map[string]interface{}{"foo": "bar"})
 
-	t.Log(rdb.Exists(ctx, "hashkey").Result())
-	t.Log(rdb.Exists(ctx, "hashkey2").Result())
+		res, err := rdb.HGetAll(ctx, "hashkey").Result()
+		assert.Len(t, res, 1)
+		assert.NoError(t, err)
 
-	deleted, err := rdb.Del(ctx, "hashkey").Result()
-	if deleted != 1 {
-		t.Error("hashkey must be deleted")
-	}
-	if err != nil {
-		t.Error("err should not exist")
-	}
+		t.Log(rdb.Exists(ctx, "hashkey").Result())
+		t.Log(rdb.Exists(ctx, "hashkey2").Result())
 
-	res, err = rdb.HGetAll(ctx, "key-does-not-exist").Result()
-	if len(res) != 0 {
-		t.Error("key-does-not-exist should not exist")
-	}
-	if err != nil {
-		t.Error("key-does-not-exist should not exist")
-	}
+		deleted, err := rdb.Del(ctx, "hashkey").Result()
+		assert.Equal(t, deleted, int64(1))
+		assert.NoError(t, err)
+	})
 
-	t.Log(rdb.Del(ctx, "key-does-not-exist").Result())
+	t.Run("struct", func(t *testing.T) {
+		type Sample struct {
+			Foo   string      `json:"foo" redis:"foo"`
+			Slice StringSlice `json:"slice" redis:"slice"`
+		}
+
+		s := Sample{
+			Foo:   "bar",
+			Slice: []string{"a", "b", "c"},
+		}
+
+		assert.NoError(t, rdb.HSet(ctx, "hashkey", s).Err())
+
+		var sample Sample
+		err := rdb.HGetAll(ctx, "hashkey").Scan(&sample)
+		assert.Equal(t, s, sample)
+		assert.NoError(t, err)
+
+		var sample2 Sample
+		err = rdb.HGetAll(ctx, "key-does-not-exists").Scan(&sample2)
+		assert.Equal(t, Sample{}, sample2)
+		assert.NoError(t, err)
+
+		var sample3 Sample
+		res := rdb.HGetAll(ctx, "hashkey")
+		hash, err := res.Result()
+		t.Log(hash, err)
+		assert.NoError(t, err)
+		assert.NoError(t, res.Scan(&sample3))
+		assert.Equal(t, s, sample3)
+	})
+
+	t.Run("when not exists", func(t *testing.T) {
+		t.Parallel()
+
+		res, err := rdb.HGetAll(ctx, "key-does-not-exist").Result()
+		assert.Len(t, res, 0)
+		assert.NoError(t, err)
+
+		deleted, err := rdb.Del(ctx, "key-does-not-exist").Result()
+		assert.Equal(t, deleted, int64(0))
+		assert.NoError(t, err)
+	})
 }
 
 func redisDb(t *testing.T) *redis.Client {
