@@ -4,10 +4,10 @@ services:
     image: redis
     ports:
       - 56739:6379
-        #  localstack:
-        #    image: localstack/localstack
-        #    ports:
-        #      - 4566:4566
+  localstack:
+    image: localstack/localstack
+    ports:
+      - 4566:4566
   mysql:
     image: mysql
     ports:
