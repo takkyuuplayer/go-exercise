@@ -28,13 +28,11 @@ func TestChromium(t *testing.T) {
 	_, err = page.Goto("https://news.ycombinator.com")
 	assert.NoError(t, err)
 
-	entries, err := page.QuerySelectorAll(".athing")
+	entries, err := page.Locator(".athing").All()
 	assert.NoError(t, err)
 
 	for i, entry := range entries {
-		titleElement, err := entry.QuerySelector("td.title > span > a")
-		assert.NoError(t, err)
-
+		titleElement := entry.Locator("td.title > span > a").First()
 		title, err := titleElement.TextContent()
 		assert.NoError(t, err)
 
