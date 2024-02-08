@@ -24,6 +24,7 @@ func TestClient(t *testing.T) {
 			ctx,
 			"test",
 			option.WithEndpoint(os.Getenv("BIGQUERY_ENDPOINT")),
+			option.WithoutAuthentication(),
 		)
 		assert.NoError(t, err)
 		t.Cleanup(func() {

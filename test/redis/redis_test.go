@@ -72,6 +72,8 @@ func TestRedisHash(t *testing.T) {
 	})
 
 	t.Run("struct", func(t *testing.T) {
+		t.Parallel()
+
 		type Sample struct {
 			Foo   string      `json:"foo" redis:"foo"`
 			Slice StringSlice `json:"slice" redis:"slice"`
