@@ -1,12 +1,15 @@
 module github.com/takkyuuplayer/go-exercise
 
-go 1.21
+go 1.21.4
+
+toolchain go1.22.4
 
 require (
 	cloud.google.com/go/bigquery v1.59.0
 	github.com/BurntSushi/toml v1.3.2
 	github.com/aws/aws-sdk-go v1.50.13
 	github.com/go-sql-driver/mysql v1.7.1
+	github.com/guregu/null/v5 v5.0.0
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/loilo-inc/exql/v2 v2.0.0
