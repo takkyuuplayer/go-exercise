@@ -43,28 +43,39 @@ func TestUnmarshal(t *testing.T) {
 
 		code := `{"field": "2024-01-01T00:00:00Z"}`
 		type params struct {
-			Field *null.Time `json:"field,omitempty"`
+			Field OptionalParam[null.Time] `json:"field"`
 		}
 		var p1 params
 		assert.NoError(t, json.Unmarshal([]byte(code), &p1))
-		assert.Equal(t,
-			params{
-				Field: &null.Time{
-					Valid: true,
+		assert.Equal(t, params{
+			Field: OptionalParam[null.Time]{
+				Defined: true,
+				Value: null.Time{
 					Time:  time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				}},
-			p1,
-		)
+					Valid: true,
+				},
+			},
+		}, p1)
 
 		code = `{"field": null}`
 		var p2 params
 		assert.NoError(t, json.Unmarshal([]byte(code), &p2))
-		//assert.Equal(t, params{Field: &null.Time{}}, p2) // FAIL!!
+		assert.Equal(t, params{
+			Field: OptionalParam[null.Time]{
+				Defined: true,
+				Value:   null.Time{},
+			},
+		}, p2)
 
 		code = `{}`
 		var p3 params
 		assert.NoError(t, json.Unmarshal([]byte(code), &p3))
-		assert.Equal(t, params{Field: nil}, p3)
+		assert.Equal(t, params{
+			Field: OptionalParam[null.Time]{
+				Defined: false,
+				Value:   null.Time{},
+			},
+		}, p3)
 	})
 
 	t.Run("null2.Time", func(t *testing.T) {
@@ -97,4 +108,14 @@ func TestUnmarshal(t *testing.T) {
 		assert.NoError(t, json.Unmarshal([]byte(code), &p3))
 		assert.Equal(t, params{Field: nil}, p3)
 	})
+}
+
+type OptionalParam[T any] struct {
+	Defined bool
+	Value   T
+}
+
+func (u *OptionalParam[T]) UnmarshalJSON(data []byte) error {
+	u.Defined = true
+	return json.Unmarshal(data, &u.Value)
 }
