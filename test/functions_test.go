@@ -106,11 +106,11 @@ func TestCapturingIterationVariables(t *testing.T) {
 	}
 
 	// i is updated
-	if f[0]() != 10 {
+	if f[0]() != 0 {
 		t.Errorf(`f[0]() = %#v, want %#v`, f[0](), 10)
 	}
 
-	if f[9]() != 10 {
+	if f[9]() != 9 {
 		t.Errorf(`f[9]() = %#v, want %#v`, f[9](), 10)
 	}
 }

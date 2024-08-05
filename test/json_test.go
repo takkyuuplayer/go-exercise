@@ -90,7 +90,7 @@ func TestUnmarshal(t *testing.T) {
 		assert.Equal(t,
 			params{
 				Field: &null2.Time{
-					sql.NullTime{
+					NullTime: sql.NullTime{
 						Valid: true,
 						Time:  time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					},
