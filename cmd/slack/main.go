@@ -16,7 +16,7 @@ func main() {
 	for _, reaction := range reactions {
 		for page := 1; true; page++ {
 			res, err := api.SearchMessages(
-				fmt.Sprintf(`has::%s: after:2022-09-30`, reaction),
+				fmt.Sprintf(`has::%s: before: 2024-10-01 after:2022-09-30`, reaction),
 				slack.SearchParameters{
 					Count: 100,
 					Sort:  "timestamp",
@@ -49,6 +49,10 @@ func main() {
 	w.Write(headers)
 
 	for _, message := range msgs {
+		if message.Channel.IsPrivate {
+			continue
+		}
+
 		replies, _, _, err := api.GetConversationReplies(&slack.GetConversationRepliesParameters{
 			ChannelID:          message.Channel.ID,
 			Timestamp:          message.Timestamp,
