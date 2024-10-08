@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"net/url"
 	"os"
+	"strings"
 
 	"github.com/slack-go/slack"
 )
@@ -16,7 +18,7 @@ func main() {
 	for _, reaction := range reactions {
 		for page := 1; true; page++ {
 			res, err := api.SearchMessages(
-				fmt.Sprintf(`has::%s: before: 2024-10-01 after:2022-09-30`, reaction),
+				fmt.Sprintf(`has::%s: before: 2024-10-01 after:2023-09-30`, reaction),
 				slack.SearchParameters{
 					Count: 100,
 					Sort:  "timestamp",
@@ -42,7 +44,7 @@ func main() {
 		"text",
 	}
 	headers = append(headers, reactions[:]...)
-	headers = append(headers, "url")
+	headers = append(headers, "url", "parent_url")
 
 	w := csv.NewWriter(os.Stdout)
 	w.Comma = '\t'
@@ -75,6 +77,14 @@ func main() {
 			values = append(values, fmt.Sprintf("%d", reacted[reaction]))
 		}
 		values = append(values, message.Permalink)
+		if r.ThreadTimestamp != "" {
+			u, _ := url.Parse(message.Permalink)
+			u.Path = fmt.Sprintf("/archives/%s/p%s", message.Channel.ID, strings.ReplaceAll(r.ThreadTimestamp, ".", ""))
+			u.RawQuery = ""
+			values = append(values, u.String())
+		} else {
+			values = append(values, "")
+		}
 
 		w.Write(values)
 	}
