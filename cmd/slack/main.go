@@ -44,7 +44,7 @@ func main() {
 		"text",
 	}
 	headers = append(headers, reactions[:]...)
-	headers = append(headers, "url", "parent_url")
+	headers = append(headers, "url", "root_url")
 
 	w := csv.NewWriter(os.Stdout)
 	w.Comma = '\t'
@@ -83,7 +83,7 @@ func main() {
 			u.RawQuery = ""
 			values = append(values, u.String())
 		} else {
-			values = append(values, "")
+			values = append(values, message.Permalink)
 		}
 
 		w.Write(values)
