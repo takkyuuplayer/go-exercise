@@ -14,7 +14,7 @@ jobs:
           go-version-file: "go.mod"
       - name: update go.mod dependencies
         run: make update
-      - uses: peter-evans/create-pull-request@v5
+      - uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Update dependencies"
