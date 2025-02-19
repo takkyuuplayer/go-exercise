@@ -14,21 +14,18 @@ jobs:
           go-version-file: "go.mod"
       - name: update go.mod dependencies
         run: make update
+
+      # https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
+      - uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           commit-message: "Update dependencies"
           title: "Update dependencies"
           branch: "update-dependencies"
           delete-branch: true
           reviewers: takkyuuplayer
-          body: |
-            Run
-
-            ```
-            $ git fetch --all
-            $ git checkout update-dependencies
-            $ git reset --hard origin/update-dependencies
-            $ git commit --allow-empty -m "run ci"
-            $ git push
-            ```
