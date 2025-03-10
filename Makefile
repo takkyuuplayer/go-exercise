@@ -1,6 +1,6 @@
 SHELL:=/bin/bash
 GOIMPORTS:=go run golang.org/x/tools/cmd/goimports@latest
-STATICCHECK:=go run honnef.co/go/tools/cmd/staticcheck@latest
+GOLANGCI_LINT:=go run github.com/golangci/golangci-lint/cmd/golangci-lint
 TPARAGEN:=go run github.com/sho-hata/tparagen/cmd/tparagen@latest
 
 compose/up:
@@ -13,7 +13,7 @@ fmt:
 	$(GOIMPORTS) -w .
 
 staticcheck:
-	$(STATICCHECK) ./...
+	$(GOLANGCI_LINT) ./...
 
 tparagen:
 	$(TPARAGEN)
