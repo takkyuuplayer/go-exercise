@@ -17,12 +17,12 @@ var GolangMessage = map[language.Tag]*message.Printer{}
 func init() {
 	cat := catalog.NewBuilder()
 
-	cat.SetString(language.Japanese, "おはよう%sさん", "おはよう%sさん")
-	cat.SetString(language.Japanese, "今朝はりんごを%d個食べました", "今朝はりんごを%d個食べました")
+	_ = cat.SetString(language.Japanese, "おはよう%sさん", "おはよう%sさん")
+	_ = cat.SetString(language.Japanese, "今朝はりんごを%d個食べました", "今朝はりんごを%d個食べました")
 
-	cat.SetString(language.English, "おはよう%sさん", "Good morning %s")
-	cat.SetString(language.English, "今朝はりんごを%d個食べました", "I ate %d ${apples(1)} this morning")
-	cat.SetMacro(language.English, "apples", plural.Selectf(1, "", plural.One, "apple"))
+	_ = cat.SetString(language.English, "おはよう%sさん", "Good morning %s")
+	_ = cat.SetString(language.English, "今朝はりんごを%d個食べました", "I ate %d ${apples(1)} this morning")
+	_ = cat.SetMacro(language.English, "apples", plural.Selectf(1, "", plural.One, "apple"))
 
 	GolangMessage[language.Japanese] = message.NewPrinter(language.Japanese, message.Catalog(cat))
 	GolangMessage[language.English] = message.NewPrinter(language.English, message.Catalog(cat))
@@ -56,12 +56,12 @@ var Localizer = map[language.Tag]*i18n.Localizer{}
 func init() {
 	ja := i18n.NewBundle(language.Japanese)
 	ja.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	ja.LoadMessageFile("active.ja.toml")
+	_, _ = ja.LoadMessageFile("active.ja.toml")
 	Localizer[language.Japanese] = i18n.NewLocalizer(ja, "ja")
 
 	en := i18n.NewBundle(language.English)
 	en.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	en.LoadMessageFile("translate.en.toml")
+	_, _ = en.LoadMessageFile("translate.en.toml")
 	Localizer[language.English] = i18n.NewLocalizer(en, "en")
 }
 

@@ -157,6 +157,7 @@ WHEN NOT MATCHED THEN
 			assert.Equal(t, bigquery.Done, status.Err())
 
 			it, err := job.Read(ctx)
+			assert.NoError(t, err)
 			for {
 				var row []bigquery.Value
 				err := it.Next(&row)

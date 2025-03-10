@@ -48,7 +48,7 @@ func main() {
 
 	w := csv.NewWriter(os.Stdout)
 	w.Comma = '\t'
-	w.Write(headers)
+	_ = w.Write(headers)
 
 	for _, message := range msgs {
 		if message.Channel.IsPrivate {
@@ -86,7 +86,7 @@ func main() {
 			values = append(values, message.Permalink)
 		}
 
-		w.Write(values)
+		_ = w.Write(values)
 	}
 	w.Flush()
 }
