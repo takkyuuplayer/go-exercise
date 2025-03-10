@@ -12,7 +12,7 @@ func TestAssets(t *testing.T) {
 	f, _ := Assets.Open("/test.txt")
 
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(f)
+	_, _ = buf.ReadFrom(f)
 
 	assert.Equal(t, "Hello World\n", buf.String())
 }
