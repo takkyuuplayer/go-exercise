@@ -33,7 +33,7 @@ func main() {
 				msgs[match.Permalink] = match
 			}
 
-			if res.Paging.Pages <= page {
+			if res.Pages <= page {
 				break
 			}
 		}

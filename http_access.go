@@ -33,7 +33,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		defer res.Body.Close()
+		defer func() {
+			_ = res.Body.Close()
+		}()
 
 		lastUrl := res.Request.URL.String()
 

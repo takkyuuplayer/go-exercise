@@ -33,7 +33,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+	defer func() {
+		_ = res.Body.Close()
+	}()
 
 	log.Printf("%s\n", res.Request.URL.Hostname())
 	log.Printf("%s\n", res.Request.URL.String())
