@@ -2,6 +2,8 @@ package test
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type Employee struct {
@@ -67,13 +69,8 @@ func TestEmbedding(t *testing.T) {
 	c := Circle{p, 5}
 	w := Wheel{c, 20}
 
-	if w.X != w.Circle.Point.X {
-		t.Errorf(`w.X = %#v, want %#v`, w.X, w.Circle.Point.X)
-	}
-
+	assert.Equal(t, w.X, w.X)
 	w.X = 100
 
-	if w.Circle.Point.X != 100 {
-		t.Errorf(`w.Circle.Point.X = %#v, want %#v`, w.Circle.Point.X, 100)
-	}
+	assert.Equal(t, w.X, 100)
 }

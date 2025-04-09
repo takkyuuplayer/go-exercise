@@ -96,7 +96,7 @@ func TestSlices(t *testing.T) {
 	t.Parallel()
 	primes := [6]int{2, 3, 5, 7, 11, 13}
 
-	var s []int = primes[1:4]
+	var s = primes[1:4]
 
 	if s[0] != 3 {
 		t.Fatal("Slice is variable length arrray: " + fmt.Sprintf("%T(%v)", s, s))

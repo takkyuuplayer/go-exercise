@@ -31,7 +31,9 @@ func TestScan(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
+	defer func() {
+		assert.NoError(t, rows.Close())
+	}()
 
 	var users []*User
 	var groups []*Group
@@ -62,7 +64,10 @@ func TestScanWithReflection(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer rows.Close()
+
+	defer func() {
+		assert.NoError(t, rows.Close())
+	}()
 
 	var users []*User
 	var groups []*Group
@@ -143,10 +148,11 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 		rows, err := db.Query(`SELECT u.*, g.* FROM users u
         LEFT JOIN group_users ug ON ug.user_id = u.id ` +
 			"LEFT JOIN `groups` g ON g.id = ug.group_id")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer rows.Close()
+
+		assert.NoError(t, err)
+		defer func() {
+			assert.NoError(t, rows.Close())
+		}()
 
 		var users []*User
 		var groups []*Group
@@ -176,7 +182,9 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer rows.Close()
+		defer func() {
+			assert.NoError(t, rows.Close())
+		}()
 
 		var users []*User
 		var groups []*Group

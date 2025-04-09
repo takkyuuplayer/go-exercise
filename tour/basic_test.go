@@ -75,9 +75,9 @@ func TestVariableDeclaration(t *testing.T) {
 func TestBasicTypes(t *testing.T) {
 	t.Parallel()
 	var (
-		ToBe   bool       = false
-		MaxInt uint64     = 1<<64 - 1
-		z      complex128 = cmplx.Sqrt(-5 + 12i)
+		ToBe          = false
+		MaxInt uint64 = 1<<64 - 1
+		z             = cmplx.Sqrt(-5 + 12i)
 	)
 	const f = "%T(%v)"
 
@@ -123,9 +123,9 @@ func TestZeroValues(t *testing.T) {
 
 func TestCasting(t *testing.T) {
 	t.Parallel()
-	var x, y int = 3, 4
-	var f float64 = math.Sqrt(float64(x*x + y*y))
-	var z uint = uint(f)
+	var x, y = 3, 4
+	var f = math.Sqrt(float64(x*x + y*y))
+	var z = uint(f)
 
 	if fmt.Sprintf("%v", f) != "5" {
 		t.Fatal("cast to fload to calculate Sqrt: " + fmt.Sprintf("%v", f))
