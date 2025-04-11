@@ -8,17 +8,21 @@ import (
 )
 
 func TestEnv_ParseAs(t *testing.T) {
-	type Bar struct {
-		Value string `env:"Bar"`
+	t.Setenv("ENV_1", "1")
+	t.Setenv("ENV_2", "2")
+	t.Setenv("ENV_3", "")
+
+	type Env2 struct {
+		Value string `env:"ENV_2"`
 	}
-	t.Setenv("Foo", "1")
-	t.Setenv("Bar", "2")
 
 	t.Run("Without reference", func(t *testing.T) {
 		t.Parallel()
+
 		type Config struct {
-			Foo string `env:"Foo"`
-			Bar Bar
+			One   string `env:"ENV_1"`
+			Two   Env2
+			Three string `env:"ENV_3" envDefault:"default"`
 		}
 
 		cfg, err := env.ParseAs[Config]()
@@ -27,10 +31,11 @@ func TestEnv_ParseAs(t *testing.T) {
 		assert.Equal(
 			t,
 			Config{
-				Foo: "1",
-				Bar: Bar{
+				One: "1",
+				Two: Env2{
 					Value: "2",
 				},
+				Three: "default",
 			},
 			cfg,
 		)
@@ -39,8 +44,9 @@ func TestEnv_ParseAs(t *testing.T) {
 	t.Run("With reference", func(t *testing.T) {
 		t.Parallel()
 		type Config struct {
-			Foo string `env:"Foo"`
-			Bar *Bar
+			One   string `env:"ENV_1"`
+			Two   *Env2
+			Three string `env:"ENV_3" envDefault:"default"`
 		}
 
 		cfg, err := env.ParseAs[Config]()
@@ -49,8 +55,9 @@ func TestEnv_ParseAs(t *testing.T) {
 		assert.Equal(
 			t,
 			Config{
-				Foo: "1",
-				Bar: nil,
+				One:   "1",
+				Two:   nil,
+				Three: "default",
 			},
 			cfg,
 		)
