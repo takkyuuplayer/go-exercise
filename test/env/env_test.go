@@ -15,6 +15,7 @@ func TestEnv_ParseAs(t *testing.T) {
 	t.Setenv("Bar", "2")
 
 	t.Run("Without reference", func(t *testing.T) {
+		t.Parallel()
 		type Config struct {
 			Foo string `env:"Foo"`
 			Bar Bar
@@ -36,6 +37,7 @@ func TestEnv_ParseAs(t *testing.T) {
 	})
 
 	t.Run("With reference", func(t *testing.T) {
+		t.Parallel()
 		type Config struct {
 			Foo string `env:"Foo"`
 			Bar *Bar
