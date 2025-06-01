@@ -31,7 +31,7 @@ jobs:
           go mod download all
           git diff --exit-code
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v7
+        uses: golangci/golangci-lint-action@v8
 
   test:
     runs-on: ubuntu-latest
