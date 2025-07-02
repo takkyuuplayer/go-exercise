@@ -21,8 +21,8 @@ require (
 	github.com/slack-go/slack v0.12.3
 	github.com/stretchr/testify v1.10.0
 	github.com/volatiletech/null v8.0.0+incompatible
-	golang.org/x/text v0.25.0
-	golang.org/x/tools v0.33.0
+	golang.org/x/text v0.26.0
+	golang.org/x/tools v0.34.0
 	google.golang.org/api v0.220.0
 )
 
@@ -239,13 +239,13 @@ require (
 	go.uber.org/automaxprocs v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
+	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250210185358-939b2ce775ac // indirect
-	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/mod v0.25.0 // indirect
+	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/oauth2 v0.25.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
+	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/time v0.9.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
