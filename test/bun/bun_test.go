@@ -35,13 +35,23 @@ func TestBung(t *testing.T) {
 	_, err = db.NewInsert().Model(user).Exec(t.Context())
 	require.NoError(t, err)
 
-	users := make([]User, 0)
+	users := make([]*User, 0)
 	err = db.NewRaw(
 		"SELECT id, name FROM ? LIMIT ?",
 		bun.Ident("users"), 100,
 	).Scan(t.Context(), &users)
 	require.NoError(t, err)
 
-	t.Log(users)
+	require.Len(t, users, 1)
+	require.Equal(
+		t,
+		[]*User{
+			{
+				ID:   1,
+				Name: "admin",
+			},
+		},
+		users,
+	)
 
 }
