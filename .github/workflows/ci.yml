@@ -28,7 +28,7 @@ jobs:
       - name: go mod
         run: |
           go mod tidy
-          go mod download all
+          go mod download
           git diff --exit-code
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
