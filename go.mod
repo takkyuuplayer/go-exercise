@@ -1,8 +1,6 @@
 module github.com/takkyuuplayer/go-exercise
 
-go 1.24
-
-toolchain go1.24.1
+go 1.25
 
 require (
 	cloud.google.com/go/bigquery v1.64.0
