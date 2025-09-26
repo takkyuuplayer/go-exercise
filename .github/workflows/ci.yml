@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-go@v5
         with:
           go-version-file: "go.mod"
@@ -28,7 +28,7 @@ jobs:
       - name: go mod
         run: |
           go mod tidy
-          go mod download all
+          go mod download
           git diff --exit-code
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
@@ -36,7 +36,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: make compose/up
       - uses: actions/setup-go@v5
         with:
