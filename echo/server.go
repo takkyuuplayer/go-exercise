@@ -81,7 +81,7 @@ func sessionRoutes(eg *echo.Group, key string) {
 		}
 		defer func() {
 			sess.Options.MaxAge = -1
-			sess.Save(c.Request(), c.Response())
+			_ = sess.Save(c.Request(), c.Response())
 		}()
 
 		return c.String(http.StatusOK, fmt.Sprintf("nonce=%v\nstate=%v\n", sess.Values["nonce"], sess.Values["state"]))
