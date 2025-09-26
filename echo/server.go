@@ -86,4 +86,31 @@ func sessionRoutes(eg *echo.Group, key string) {
 
 		return c.String(http.StatusOK, fmt.Sprintf("nonce=%v\nstate=%v\n", sess.Values["nonce"], sess.Values["state"]))
 	})
+	eg.GET("/regenerate-session", func(c echo.Context) error {
+		sess, err := session.Get(key, c)
+		if err != nil {
+			return err
+		}
+
+		options := *sess.Options
+		sess.Options.MaxAge = -1
+		if err := sess.Save(c.Request(), c.Response()); err != nil {
+			return err
+		}
+
+		sess, err = session.Get(sess.Name(), c)
+		if err != nil {
+			return err
+		}
+
+		if err := sess.Save(c.Request(), c.Response()); err != nil {
+			return err
+		}
+		sess.Options = &options
+		if err := sess.Save(c.Request(), c.Response()); err != nil {
+			return err
+		}
+
+		return c.String(http.StatusOK, fmt.Sprintf("nonce=%v\nstate=%v\n", sess.Values["nonce"], sess.Values["state"]))
+	})
 }
