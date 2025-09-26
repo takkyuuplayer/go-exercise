@@ -20,7 +20,7 @@ tparagen:
 
 update:
 	go mod edit -go=$(shell go env GOVERSION | sed 's/^go//' | sed -e 's/.[0-9]$+$$//g')
-	go get -u ./...
+	go get -u
 	go mod tidy
 	go mod download
 
