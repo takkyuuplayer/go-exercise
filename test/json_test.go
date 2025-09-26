@@ -3,6 +3,9 @@ package test
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
+	"io"
+	"strings"
 	"testing"
 	"time"
 
@@ -107,6 +110,43 @@ func TestUnmarshal(t *testing.T) {
 		var p3 params
 		assert.NoError(t, json.Unmarshal([]byte(code), &p3))
 		assert.Equal(t, params{Field: nil}, p3)
+	})
+}
+
+func TestJSONLines(t *testing.T) {
+	t.Parallel()
+
+	t.Run("multiple lines", func(t *testing.T) {
+		t.Parallel()
+
+		lines := `{"field": "value1"}
+{"field": "value2"}`
+		type params struct {
+			Field string `json:"field"`
+		}
+
+		var parsed []params
+		dec := json.NewDecoder(strings.NewReader(lines))
+		for {
+			p := params{}
+			if err := dec.Decode(&p); err != nil {
+				if errors.Is(err, io.EOF) {
+					break
+				}
+				t.Fatalf("failed to decode: %v", err)
+			}
+			parsed = append(parsed, p)
+		}
+
+		assert.Equal(
+			t,
+			[]params{
+				{Field: "value1"},
+				{Field: "value2"},
+			},
+			parsed,
+		)
+
 	})
 }
 
