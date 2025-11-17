@@ -27,7 +27,6 @@ require (
 	github.com/uptrace/bun/driver/sqliteshim v1.2.15
 	github.com/volatiletech/null v8.0.0+incompatible
 	golang.org/x/text v0.30.0
-	golang.org/x/tools v0.38.0
 	google.golang.org/api v0.220.0
 )
 
@@ -262,6 +261,7 @@ require (
 	golang.org/x/sys v0.37.0 // indirect
 	golang.org/x/telemetry v0.0.0-20251008203120-078029d740a8 // indirect
 	golang.org/x/time v0.11.0 // indirect
+	golang.org/x/tools v0.38.0 // indirect
 	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto v0.0.0-20241118233622-e639e219e697 // indirect
