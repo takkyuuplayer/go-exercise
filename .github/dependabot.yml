@@ -1,6 +1,5 @@
 version: 2
 
-
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -10,7 +9,7 @@ updates:
     groups:
       github-actions:
         patterns:
-          - '*'
+          - "*"
   - package-ecosystem: "gomod"
     directories:
       - "**/*"
@@ -20,4 +19,4 @@ updates:
     groups:
       gomod:
         patterns:
-          - '*'
+          - "*"
