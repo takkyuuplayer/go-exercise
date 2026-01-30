@@ -4,6 +4,19 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
-    reviewers:
-      - takkyuuplayer
+      interval: "cron"
+      cronjob: "0 0 1 * *"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: "gomod"
+    directories:
+      - "**/*"
+    schedule:
+      interval: "cron"
+      cronjob: "0 0 1 * *"
+    groups:
+      gomod:
+        patterns:
+          - "*"
