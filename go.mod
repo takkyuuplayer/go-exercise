@@ -5,7 +5,6 @@ go 1.25.0
 require (
 	cloud.google.com/go/bigquery v1.72.0
 	github.com/BurntSushi/toml v1.6.0
-	github.com/aws/aws-sdk-go v1.55.8
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/google/uuid v1.6.0
@@ -137,7 +136,6 @@ require (
 	github.com/jingyugao/rowserrcheck v1.1.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jjti/go-spancheck v0.6.4 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/julz/importas v0.2.0 // indirect
 	github.com/karamaru-alpha/copyloopvar v1.2.1 // indirect
 	github.com/kisielk/errcheck v1.9.0 // indirect
