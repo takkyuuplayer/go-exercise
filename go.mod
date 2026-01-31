@@ -12,7 +12,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/guregu/null/v5 v5.0.0
 	github.com/jessevdk/go-assets v0.0.0-20160921144138-4f4301a06e15
-	github.com/labstack/echo-contrib v0.50.0
+	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/loilo-inc/exql/v2 v2.2.1
 	github.com/nicksnyder/go-i18n/v2 v2.6.1
