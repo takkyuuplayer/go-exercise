@@ -20,3 +20,5 @@ updates:
       gomod:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "github.com/labstack/echo-contrib"
