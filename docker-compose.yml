@@ -4,11 +4,6 @@ services:
     image: redis
     ports:
       - 6379
-  localstack:
-    init: true
-    image: localstack/localstack
-    ports:
-      - 4566
   mysql:
     init: true
     image: mysql
