@@ -11,7 +11,6 @@ compose/up:
 .PHONY: .env
 .env:
 	@set -a; source .env; set +a; \
-	REDIS_PORT=$$(docker compose port redis 6379 | cut -d: -f2) \
 	MYSQL_PORT=$$(docker compose port mysql 3306 | cut -d: -f2) \
 	BIGQUERY_PORT=$$(docker compose port bigquery 9050 | cut -d: -f2) \
 	envsubst < .env.template > .env
