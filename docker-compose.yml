@@ -1,9 +1,4 @@
 services:
-  redis:
-    init: true
-    image: redis
-    ports:
-      - 6379
   mysql:
     init: true
     image: mysql
