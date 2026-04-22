@@ -22,3 +22,32 @@ services:
       --project=test
     ports:
       - 9050
+  redis-cluster-node-1:
+    init: true
+    image: redis
+    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    ports:
+      - 6379
+  redis-cluster-node-2:
+    init: true
+    image: redis
+    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    ports:
+      - 6379
+  redis-cluster-node-3:
+    init: true
+    image: redis
+    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    ports:
+      - 6379
+  redis-cluster-init:
+    image: redis
+    command: >
+      sh -c "sleep 3 && redis-cli --cluster create
+      redis-cluster-node-1:6379 redis-cluster-node-2:6379 redis-cluster-node-3:6379
+      --cluster-replicas 0 --cluster-yes"
+    depends_on:
+      - redis-cluster-node-1
+      - redis-cluster-node-2
+      - redis-cluster-node-3
+    restart: "no"
