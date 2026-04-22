@@ -33,6 +33,9 @@ update:
 	go mod tidy
 	go mod download
 
+/etc/hosts/redis-cluster:
+	@echo "127.0.0.1 redis-cluster-node-1 redis-cluster-node-2 redis-cluster-node-3" | sudo tee -a /etc/hosts
+
 .PHONY: test
 test:
 	go clean -testcache
