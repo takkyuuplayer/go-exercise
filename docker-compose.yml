@@ -25,29 +25,52 @@ services:
   redis-cluster-node-1:
     init: true
     image: redis
-    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    command: >
+      redis-server --port 7001 --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip host.docker.internal
+      --cluster-announce-port 7001 --cluster-announce-bus-port 17001
     ports:
-      - 6379
+      - "7001:7001"
+      - "17001:17001"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis-cluster-node-2:
     init: true
     image: redis
-    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    command: >
+      redis-server --port 7002 --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip host.docker.internal
+      --cluster-announce-port 7002 --cluster-announce-bus-port 17002
     ports:
-      - 6379
+      - "7002:7002"
+      - "17002:17002"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis-cluster-node-3:
     init: true
     image: redis
-    command: redis-server --cluster-enabled yes --cluster-node-timeout 5000 --cluster-config-file nodes.conf --appendonly yes
+    command: >
+      redis-server --port 7003 --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip host.docker.internal
+      --cluster-announce-port 7003 --cluster-announce-bus-port 17003
     ports:
-      - 6379
+      - "7003:7003"
+      - "17003:17003"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis-cluster-init:
     image: redis
     command: >
       sh -c "sleep 3 && redis-cli --cluster create
-      redis-cluster-node-1:6379 redis-cluster-node-2:6379 redis-cluster-node-3:6379
+      host.docker.internal:7001 host.docker.internal:7002 host.docker.internal:7003
       --cluster-replicas 0 --cluster-yes"
     depends_on:
       - redis-cluster-node-1
       - redis-cluster-node-2
       - redis-cluster-node-3
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: "no"
