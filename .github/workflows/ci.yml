@@ -50,5 +50,5 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
       - run: sleep 10s
       - run: docker compose ps
-      - run: make /etc/hosts/redis-cluster
+      - run: make load/etc/hosts/redis-cluster
       - run: make test
