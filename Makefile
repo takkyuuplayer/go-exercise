@@ -33,8 +33,11 @@ update:
 	go mod tidy
 	go mod download
 
-/etc/hosts/redis-cluster:
+load/etc/hosts/redis-cluster:
 	@echo "127.0.0.1 redis-cluster-node-1 redis-cluster-node-2 redis-cluster-node-3" | sudo tee -a /etc/hosts
+
+unload/etc/hosts/redis-cluster:
+	@sudo sed -i '' '/^127\.0\.0\.1 redis-cluster-node-1 redis-cluster-node-2 redis-cluster-node-3$$/d' /etc/hosts
 
 .PHONY: test
 test:
