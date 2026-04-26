@@ -4,15 +4,16 @@ GOLANGCI_LINT:=go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@lat
 TPARAGEN:=go run github.com/sho-hata/tparagen/cmd/tparagen@latest
 
 compose/up:
-	bin/find-free-ports.sh > .env
+	bin/find-free-ports.sh > .env.ports
+	$(MAKE) .env
 	docker compose up -d --pull always --build
 	$(MAKE) .env
 
 .PHONY: .env
 .env:
-	@set -a; source .env; set +a; \
-	MYSQL_PORT=$$(docker compose port mysql 3306 | cut -d: -f2) \
-	BIGQUERY_PORT=$$(docker compose port bigquery 9050 | cut -d: -f2) \
+	@set -a; source .env.ports; set +a; \
+	MYSQL_PORT=$$(docker compose port mysql 3306 2>/dev/null | cut -d: -f2) \
+	BIGQUERY_PORT=$$(docker compose port bigquery 9050 2>/dev/null | cut -d: -f2) \
 	envsubst < .env.template > .env
 
 compose/down:
