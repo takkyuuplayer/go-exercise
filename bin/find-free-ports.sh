@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Emit REDIS_CLUSTER_NODE_{1,2,3}_PORT=<port> to stdout.
-# Ports are picked in 7000-54999 so that the cluster bus port
-# (announce-port + 10000) stays within the 65535 TCP limit.
+# Emit PORT1=<port>, PORT2=<port>, ... to stdout.
+# Usage: find-free-ports.sh [count]   (default: 3)
+# Picks ports in 10000-49999 to avoid the typical ephemeral range
+# and leave headroom for callers that need a paired companion port.
+
+count=${1:-3}
 
 in_use() {
   lsof -iTCP:"$1" -sTCP:LISTEN -nP 2>/dev/null | grep -q .
@@ -12,7 +15,7 @@ in_use() {
 pick_port() {
   local picked="$1" p
   while :; do
-    p=$(( ((RANDOM << 15) | RANDOM) % 48000 + 7000 ))
+    p=$(( ((RANDOM << 15) | RANDOM) % 40000 + 10000 ))
     [[ " $picked " == *" $p "* ]] && continue
     in_use "$p" && continue
     echo "$p"
@@ -21,8 +24,8 @@ pick_port() {
 }
 
 picked=""
-for i in 1 2 3; do
+for ((i=1; i<=count; i++)); do
   p=$(pick_port "$picked")
   picked="$picked $p"
-  echo "REDIS_CLUSTER_NODE_${i}_PORT=$p"
+  echo "PORT${i}=$p"
 done
