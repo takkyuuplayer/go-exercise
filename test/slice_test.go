@@ -3,6 +3,8 @@ package test
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSlice(t *testing.T) {
@@ -120,4 +122,13 @@ func TestCopy(t *testing.T) {
 	if c != 3 {
 		t.Errorf(`c = %#v, want %#v`, c, 3)
 	}
+}
+
+func TestPartial(t *testing.T) {
+	t.Parallel()
+
+	a := []int{1, 2, 3}
+
+	assert.Equal(t, cap(a[:1]), 3)
+	assert.Equal(t, cap(a[1:]), 2)
 }
