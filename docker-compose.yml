@@ -1,9 +1,4 @@
 services:
-  redis:
-    init: true
-    image: redis
-    ports:
-      - 6379
   mysql:
     init: true
     image: mysql
@@ -22,3 +17,43 @@ services:
       --project=test
     ports:
       - 9050
+  redis-cluster-node-1:
+    init: true
+    image: redis
+    command: >
+      redis-server --port ${REDIS_CLUSTER_NODE_1_PORT} --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip redis-cluster-node-1 --cluster-announce-port ${REDIS_CLUSTER_NODE_1_PORT}
+    ports:
+      - "${REDIS_CLUSTER_NODE_1_PORT}:${REDIS_CLUSTER_NODE_1_PORT}"
+  redis-cluster-node-2:
+    init: true
+    image: redis
+    command: >
+      redis-server --port ${REDIS_CLUSTER_NODE_2_PORT} --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip redis-cluster-node-2 --cluster-announce-port ${REDIS_CLUSTER_NODE_2_PORT}
+    ports:
+      - "${REDIS_CLUSTER_NODE_2_PORT}:${REDIS_CLUSTER_NODE_2_PORT}"
+  redis-cluster-node-3:
+    init: true
+    image: redis
+    command: >
+      redis-server --port ${REDIS_CLUSTER_NODE_3_PORT} --cluster-enabled yes --cluster-node-timeout 5000
+      --cluster-config-file nodes.conf --appendonly yes
+      --cluster-announce-ip redis-cluster-node-3 --cluster-announce-port ${REDIS_CLUSTER_NODE_3_PORT}
+    ports:
+      - "${REDIS_CLUSTER_NODE_3_PORT}:${REDIS_CLUSTER_NODE_3_PORT}"
+  redis-cluster-init:
+    image: redis
+    command: >
+      sh -c "sleep 3 && redis-cli --cluster create
+      redis-cluster-node-1:${REDIS_CLUSTER_NODE_1_PORT}
+      redis-cluster-node-2:${REDIS_CLUSTER_NODE_2_PORT}
+      redis-cluster-node-3:${REDIS_CLUSTER_NODE_3_PORT}
+      --cluster-replicas 0 --cluster-yes"
+    depends_on:
+      - redis-cluster-node-1
+      - redis-cluster-node-2
+      - redis-cluster-node-3
+    restart: "no"

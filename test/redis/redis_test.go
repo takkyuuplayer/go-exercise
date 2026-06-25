@@ -117,17 +117,10 @@ func TestRedisHash(t *testing.T) {
 	})
 }
 
-func redisDb(t *testing.T) *redis.Client {
+func redisDb(t *testing.T) *redis.ClusterClient {
 	t.Helper()
 
-	var db *redis.Client
-	if host, ok := os.LookupEnv("REDIS_HOST"); ok && host != "" {
-		db = redis.NewClient(&redis.Options{
-			Addr: host,
-		})
-	} else {
-		db = redis.NewClient(&redis.Options{})
-	}
-
-	return db
+	return redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs: []string{os.Getenv("REDIS_CLUSTER_ADDR")},
+	})
 }
