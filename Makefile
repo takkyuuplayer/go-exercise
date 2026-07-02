@@ -18,6 +18,7 @@ compose/up:
 
 compose/down:
 	docker compose down --remove-orphans
+	@rm .env
 
 fmt:
 	$(GOIMPORTS) -w .
