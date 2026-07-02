@@ -3,6 +3,9 @@ GOIMPORTS:=go run golang.org/x/tools/cmd/goimports@latest
 GOLANGCI_LINT:=go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 TPARAGEN:=go run github.com/sho-hata/tparagen/cmd/tparagen@latest
 
+# .env は 2 回生成する:
+#  up 前 … redis のポート変数を .env に埋めて compose の変数補間に渡すため
+#  up 後 … docker が割り当てた mysql/bigquery のホストポートを .env に反映するため
 compose/up:
 	bin/find-free-ports.sh > .env.ports
 	$(MAKE) .env
@@ -18,7 +21,7 @@ compose/up:
 
 compose/down:
 	docker compose down --remove-orphans
-	@rm .env
+	@rm -f .env .env.ports
 
 fmt:
 	$(GOIMPORTS) -w .
