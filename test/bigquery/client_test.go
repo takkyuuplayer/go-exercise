@@ -38,7 +38,7 @@ func TestClient(t *testing.T) {
 			dataset.Create(context.Background(), nil),
 		)
 		t.Cleanup(func() {
-			assert.NoError(t, dataset.Delete(context.Background()))
+			assert.NoError(t, dataset.DeleteWithContents(context.Background()))
 		})
 
 		// List datasets
