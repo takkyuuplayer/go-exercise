@@ -1,4 +1,10 @@
 SHELL:=/bin/bash
+
+# compose のプロジェクト名はディレクトリの basename 由来のため、git worktree を
+# 複数切ると衝突しうる。パスのハッシュを混ぜて worktree ごとに一意にする。
+COMPOSE_PROJECT_NAME:=$(shell basename '$(CURDIR)' | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g')-$(shell printf %s '$(CURDIR)' | shasum | cut -c1-8)
+export COMPOSE_PROJECT_NAME
+
 GOIMPORTS:=go run golang.org/x/tools/cmd/goimports@latest
 GOLANGCI_LINT:=go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 TPARAGEN:=go run github.com/sho-hata/tparagen/cmd/tparagen@latest
