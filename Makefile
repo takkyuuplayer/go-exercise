@@ -38,12 +38,6 @@ golangci-lint:
 tparagen:
 	$(TPARAGEN)
 
-update:
-	go mod edit -go=$(shell go env GOVERSION | sed 's/^go//' | sed -e 's/.[0-9]$+$$//g')
-	go get -u
-	go mod tidy
-	go mod download
-
 load/etc/hosts/redis-cluster:
 	@echo "127.0.0.1 redis-cluster-node-1 redis-cluster-node-2 redis-cluster-node-3" | sudo tee -a /etc/hosts
 
