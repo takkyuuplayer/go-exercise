@@ -3,7 +3,8 @@ package playwright_test
 import (
 	"testing"
 
-	"github.com/playwright-community/playwright-go"
+	"github.com/mxschmitt/playwright-go"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,20 +13,29 @@ func TestChromium(t *testing.T) {
 	runOptions := &playwright.RunOptions{
 		Browsers: []string{"chromium"},
 	}
-	assert.NoError(t, playwright.Install(runOptions))
+	require.NoError(t, playwright.Install(runOptions))
 
 	pw, err := playwright.Run()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: playwright.Bool(true),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	page, err := browser.NewPage()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
-	_, err = page.Goto("https://news.ycombinator.com")
+	err = page.SetContent(`
+<table>
+	<tr class="athing">
+		<td class="title"><span><a>first title</a></span></td>
+	</tr>
+	<tr class="athing">
+		<td class="title"><span><a>second title</a></span></td>
+	</tr>
+</table>
+`)
 	assert.NoError(t, err)
 
 	entries, err := page.Locator(".athing").All()

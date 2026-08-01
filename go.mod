@@ -14,9 +14,9 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/loilo-inc/exql/v2 v2.2.2
+	github.com/mxschmitt/playwright-go v0.6100.0
 	github.com/nicksnyder/go-i18n/v2 v2.6.1
 	github.com/oklog/ulid/v2 v2.1.1
-	github.com/playwright-community/playwright-go v0.5700.1
 	github.com/rbcervilla/redisstore/v9 v9.0.0
 	github.com/redis/go-redis/v9 v9.21.0
 	github.com/slack-go/slack v0.27.0
