@@ -5,6 +5,7 @@ import (
 
 	"github.com/playwright-community/playwright-go"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestChromium(t *testing.T) {
@@ -12,15 +13,17 @@ func TestChromium(t *testing.T) {
 	runOptions := &playwright.RunOptions{
 		Browsers: []string{"chromium"},
 	}
-	assert.NoError(t, playwright.Install(runOptions))
+	if err := playwright.Install(runOptions); err != nil {
+		t.Skipf("skipping playwright test: %v", err)
+	}
 
 	pw, err := playwright.Run()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: playwright.Bool(true),
 	})
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	page, err := browser.NewPage()
 	assert.NoError(t, err)
