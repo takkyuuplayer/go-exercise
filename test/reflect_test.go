@@ -15,7 +15,7 @@ func TestType(t *testing.T) {
 	t.Parallel()
 	var a *MyStruct
 
-	f := func(models ...interface{}) {
+	f := func(models ...any) {
 		for _, model := range models {
 			assert.Equal(t, 1, reflect.TypeOf(model).Elem().Elem().NumField())
 		}
@@ -42,29 +42,29 @@ func TestSetting(t *testing.T) {
 	assert.Equal(t, 5, a.A)
 }
 
-func wipePassed(r interface{}) {
+func wipePassed(r any) {
 	v := reflect.ValueOf(r)
 	p := v.Elem()
 	p.Set(reflect.Zero(p.Type()))
 }
 
-func setValue(r interface{}) {
+func setValue(r any) {
 	v := reflect.ValueOf(r)
 	p := v.Elem().Elem()
 
-	for i := 0; i < p.NumField(); i++ {
-		f := p.Field(i)
+	for _, f := range p.Fields() {
+		f := f
 		f.SetInt(1)
 	}
 }
 
-func setValueWithInterface(r interface{}) {
+func setValueWithInterface(r any) {
 	v := reflect.ValueOf(r)
 	p := v.Elem().Elem()
 
-	a := interface{}(int(5))
-	for i := 0; i < p.NumField(); i++ {
-		f := p.Field(i)
+	a := any(int(5))
+	for _, f := range p.Fields() {
+		f := f
 		f.Set(reflect.ValueOf(&a).Elem().Elem())
 	}
 }

@@ -69,10 +69,8 @@ func TestXMLUnmarshal(t *testing.T) {
 			},
 		},
 		Groups: []string{"Friends", "Squash"},
-		Address: Address{
-			City:  "Hanga Roa",
-			State: "Easter Island",
-		},
+		City:   "Hanga Roa",
+		State:  "Easter Island",
 	}
 
 	if !reflect.DeepEqual(v.XMLName, want.XMLName) {

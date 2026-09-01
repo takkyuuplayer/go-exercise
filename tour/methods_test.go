@@ -98,7 +98,7 @@ func TestInterfaceWithNil(t *testing.T) {
 
 func TestEmptyInterface(t *testing.T) {
 	t.Parallel()
-	var i interface{}
+	var i any
 
 	i = 42
 
@@ -115,7 +115,7 @@ func TestEmptyInterface(t *testing.T) {
 
 func TestTypeAssertions(t *testing.T) {
 	t.Parallel()
-	var i interface{} = "hello"
+	var i any = "hello"
 
 	if fmt.Sprintf("%T(%v)", i, i) != "string(hello)" {
 		t.Fatal("This is string: " + fmt.Sprintf("%T(%v)", fmt.Sprintf("%T(%v)", i, i), fmt.Sprintf("%T(%v)", i, i)))
@@ -145,7 +145,7 @@ func TestTypeAssertions(t *testing.T) {
 
 func TestTypeSwitches(t *testing.T) {
 	t.Parallel()
-	var i interface{} = 24
+	var i any = 24
 
 	switch v := i.(type) {
 	case int:

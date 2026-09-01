@@ -101,7 +101,7 @@ func TestCapturingIterationVariables(t *testing.T) {
 	t.Parallel()
 	var f []func() int
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		f = append(f, func() int { return i })
 	}
 

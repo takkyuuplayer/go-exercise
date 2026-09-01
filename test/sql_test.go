@@ -75,7 +75,7 @@ func TestScanWithReflection(t *testing.T) {
 	for rows.Next() {
 		var user = &User{}
 		var group = &Group{}
-		values := make([]interface{}, 4)
+		values := make([]any, 4)
 		values[0] = reflect.ValueOf(user).Elem().Field(0).Addr().Interface()
 		values[1] = reflect.ValueOf(user).Elem().Field(1).Addr().Interface()
 		values[2] = reflect.ValueOf(group).Elem().Field(0).Addr().Interface()
@@ -98,7 +98,7 @@ func TestScanWithReflection(t *testing.T) {
 func TestScanLeftJoinWithReflection(t *testing.T) {
 	db := mysqlDb(t)
 
-	scan := func(rows *sql.Rows, models ...interface{}) {
+	scan := func(rows *sql.Rows, models ...any) {
 		sum := 0
 		numFields := map[int]int{}
 		types := map[int]reflect.Type{}
@@ -107,7 +107,7 @@ func TestScanLeftJoinWithReflection(t *testing.T) {
 			numFields[modelIdx] = types[modelIdx].NumField()
 			sum += numFields[modelIdx]
 		}
-		values := make([]interface{}, sum)
+		values := make([]any, sum)
 
 		idx := 0
 		elements := make([]reflect.Value, len(models))
