@@ -15,7 +15,7 @@ func Greet() string {
 			ID:    "おはよう%sさん",
 			Other: "おはよう{{.Name}}さん",
 		},
-		TemplateData: map[string]interface{}{
+		TemplateData: map[string]any{
 			"Name": "takkyuuplayer",
 		},
 	})

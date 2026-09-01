@@ -69,7 +69,7 @@ func TestMustLocalize(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, "おはようtakkyuuplayerさん",
 		Localizer[language.Japanese].MustLocalize(
-			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]interface{}{"Name": "takkyuuplayer"}},
+			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]any{"Name": "takkyuuplayer"}},
 		))
 	assert.Equal(t, "今朝はりんごを1個食べました",
 		Localizer[language.Japanese].MustLocalize(
@@ -82,7 +82,7 @@ func TestMustLocalize(t *testing.T) {
 
 	assert.Equal(t, "Good morning takkyuuplayer",
 		Localizer[language.English].MustLocalize(
-			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]interface{}{"Name": "takkyuuplayer"}},
+			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]any{"Name": "takkyuuplayer"}},
 		))
 	assert.Equal(t, "I ate 1 apple",
 		Localizer[language.English].MustLocalize(
@@ -97,7 +97,7 @@ func TestMustLocalize(t *testing.T) {
 func BenchmarkMustLocalize(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Localizer[language.Japanese].MustLocalize(
-			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]interface{}{"Name": "takkyuuplayer"}},
+			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]any{"Name": "takkyuuplayer"}},
 		)
 		Localizer[language.Japanese].MustLocalize(
 			&i18n.LocalizeConfig{MessageID: "今朝はりんごを%d個食べました", PluralCount: 1},
@@ -106,7 +106,7 @@ func BenchmarkMustLocalize(b *testing.B) {
 			&i18n.LocalizeConfig{MessageID: "今朝はりんごを%d個食べました", PluralCount: 2},
 		)
 		Localizer[language.English].MustLocalize(
-			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]interface{}{"Name": "takkyuuplayer"}},
+			&i18n.LocalizeConfig{MessageID: "おはよう%sさん", TemplateData: map[string]any{"Name": "takkyuuplayer"}},
 		)
 		Localizer[language.English].MustLocalize(
 			&i18n.LocalizeConfig{MessageID: "今朝はりんごを%d個食べました", PluralCount: 1},

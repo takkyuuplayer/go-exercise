@@ -42,9 +42,7 @@ func TestPipeline(t *testing.T) {
 			}
 		}()
 
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			interval := time.Tick(100 * time.Millisecond)
 			cached := make([]int, 0, 10)
 			for {
@@ -68,7 +66,7 @@ func TestPipeline(t *testing.T) {
 					}
 				}
 			}
-		}()
+		})
 
 		wg.Wait()
 		return totalMessage

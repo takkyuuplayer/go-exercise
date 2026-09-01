@@ -1,7 +1,6 @@
 package test
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"io"
@@ -93,10 +92,8 @@ func TestUnmarshal(t *testing.T) {
 		assert.Equal(t,
 			params{
 				Field: &null2.Time{
-					NullTime: sql.NullTime{
-						Valid: true,
-						Time:  time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-					},
+					Valid: true,
+					Time:  time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				}},
 			p1,
 		)

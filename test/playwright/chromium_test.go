@@ -19,7 +19,7 @@ func TestChromium(t *testing.T) {
 	require.NoError(t, err)
 
 	browser, err := pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
-		Headless: playwright.Bool(true),
+		Headless: new(true),
 	})
 	require.NoError(t, err)
 

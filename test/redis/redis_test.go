@@ -57,7 +57,7 @@ func TestRedisHash(t *testing.T) {
 	t.Run("when exists", func(t *testing.T) {
 		t.Parallel()
 
-		rdb.HSet(ctx, "hashkey", map[string]interface{}{"foo": "bar"})
+		rdb.HSet(ctx, "hashkey", map[string]any{"foo": "bar"})
 
 		res, err := rdb.HGetAll(ctx, "hashkey").Result()
 		assert.Len(t, res, 1)

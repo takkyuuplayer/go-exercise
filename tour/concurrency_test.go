@@ -10,7 +10,7 @@ func TestRangeAndClose(t *testing.T) {
 	fib := func(n int, c chan int) {
 		current, next := 0, 1
 
-		for i := 0; i < n; i++ {
+		for range n {
 			c <- current
 			current, next = next, current+next
 		}
@@ -53,7 +53,7 @@ func TestSelect(t *testing.T) {
 	sum := 0
 
 	go func() {
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			sum += <-c
 		}
 		quit <- 0
