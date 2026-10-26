@@ -1,4 +1,4 @@
-// nolint: paralleltest
+//nolint:paralleltest
 package test
 
 import (
