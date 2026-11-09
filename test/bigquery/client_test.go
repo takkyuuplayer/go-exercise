@@ -115,6 +115,7 @@ func TestClient(t *testing.T) {
 
 		// Merge data
 		t.Run("Merge", func(t *testing.T) {
+			t.Parallel()
 			t.Skip("Not working in emulator")
 
 			t2 := client.Dataset(dataset.DatasetID).Table("tmp_" + ulid.Make().String())
